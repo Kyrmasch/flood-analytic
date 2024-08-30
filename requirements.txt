@@ -1,0 +1,8 @@
+cupy-cuda12x
+dask-cuda
+dask
+distributed
+fastapi
+uvicorn
+pynvml==11.4.1
+rmm-cu12
