@@ -1,7 +1,7 @@
 cupy-cuda12x
-dask-cuda
-dask
 distributed
+dask
+dask-cuda
 fastapi
 uvicorn
 pynvml==11.4.1

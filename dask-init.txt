@@ -1,4 +1,2 @@
-apt install nvidia-cuda-toolkit
-
 dask-scheduler
-dask-cuda-worker tcp://localhost:8786 --nthreads 1 --memory-limit 0 --rmm-pool-size 4GB
+dask-cuda-worker tcp://localhost:8786 --nthreads 1 --memory-limit 0 --rmm-pool-size 1GB
