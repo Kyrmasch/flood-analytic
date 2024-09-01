@@ -5,7 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: FastAPI",
+            "command": "npm run dev",
+            "name": "FrontEnd",
+            "request": "launch",
+            "type": "node-terminal",
+            "cwd": "${workspaceFolder}/frontend"
+        },
+        {
+            "name": "BackEnd",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
@@ -13,7 +20,8 @@
                 "main:app",
                 "--reload"
             ],
-            "jinja": true
+            "jinja": true,
+            "cwd": "${workspaceFolder}/backend"
         }
     ]
 }
