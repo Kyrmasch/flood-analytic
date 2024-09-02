@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { WebSocketContextType } from "./types/WebSocketContextType";
+import { WS_URL } from "../variables";
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(
   undefined
@@ -18,6 +19,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [clientId, setClientId] = useState<string | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
   const messageHandlerRef = useRef<(message: string) => void>(() => {});
 
   useEffect(() => {
@@ -25,19 +27,42 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       const fp = await FingerprintJS.load();
       const result = await fp.get();
       const visitorId = result.visitorId;
-      if (messageHandlerRef.current) {
-        messageHandlerRef.current(visitorId);
-      }
+
+      const ws = new WebSocket(`${WS_URL}/ws/${visitorId}`);
+      socketRef.current = ws;
+      setSocket(ws);
+
+      ws.onopen = () => {
+        console.log('WebSocket соединение установлено');
+      };
+
+      ws.onmessage = (event) => {
+        const message = event.data;
+        if (messageHandlerRef.current) {
+          messageHandlerRef.current(message);
+        }
+      };
+
+      ws.onerror = (error) => {
+        console.error('Ошибка WebSocket:', error);
+      };
+
+      ws.onclose = () => {
+        console.log('WebSocket соединение закрыто');
+      };
 
       if (clientId == null) {
         setClientId(visitorId);
       }
-      setSocket(null);
     };
 
     initializeWebSocket();
 
-    return () => {};
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
+    };
   }, []);
 
   const sendMessage = (message: string) => {

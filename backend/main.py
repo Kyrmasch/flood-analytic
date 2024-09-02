@@ -1,11 +1,12 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from dask.distributed import Client
-import dask.array as da
-import cupy as cp
+
 from fastapi.staticfiles import StaticFiles
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from routers.ws import websocket_router
+from routers.calc import another_router
 
 app = FastAPI()
 client = Client("tcp://localhost:8786")
@@ -32,25 +33,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.get("/calc")
-async def gpu_calculate():
-    try:
-        x = da.from_array(cp.random.rand(100, 100), chunks=(100, 100))
-        result = (x @ x.T).sum(axis=0).compute()
-        result_cpu = cp.asnumpy(result)
-
-        cp.get_default_memory_pool().free_all_blocks()
-
-        return {"result": result_cpu.tolist()}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+app.include_router(websocket_router, prefix="/ws")
+app.include_router(another_router, prefix="/api")
 
 
-@app.get("/{full_path:path}")
-async def catch_all(full_path: str, request: Request):
-    requested_file = os.path.join(dist_directory, full_path)
-    if os.path.exists(requested_file) and os.path.isfile(requested_file):
-        return FileResponse(requested_file)
+# @app.get("/{full_path:path}")
+# async def catch_all(full_path: str, request: Request):
+#     requested_file = os.path.join(dist_directory, full_path)
+#     if os.path.exists(requested_file) and os.path.isfile(requested_file):
+#         return FileResponse(requested_file)
 
-    return FileResponse(os.path.join(dist_directory, "index.html"))
+#     return FileResponse(os.path.join(dist_directory, "index.html"))
