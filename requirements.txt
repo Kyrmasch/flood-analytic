@@ -3,6 +3,6 @@ distributed
 dask
 dask-cuda
 fastapi
-uvicorn
+'uvicorn[standard]'
 pynvml==11.4.1
 rmm-cu12

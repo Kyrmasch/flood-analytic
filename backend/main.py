@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from routers.ws import websocket_router
-from routers.calc import another_router
+from routers.calc import calc_router
 
 app = FastAPI()
 client = Client("tcp://localhost:8786")
@@ -34,13 +34,13 @@ app.add_middleware(
 )
 
 app.include_router(websocket_router, prefix="/ws")
-app.include_router(another_router, prefix="/api")
+app.include_router(calc_router, prefix="/api")
 
 
-# @app.get("/{full_path:path}")
-# async def catch_all(full_path: str, request: Request):
-#     requested_file = os.path.join(dist_directory, full_path)
-#     if os.path.exists(requested_file) and os.path.isfile(requested_file):
-#         return FileResponse(requested_file)
+@app.get("/{full_path:path}")
+async def catch_all(full_path: str, request: Request):
+    requested_file = os.path.join(dist_directory, full_path)
+    if os.path.exists(requested_file) and os.path.isfile(requested_file):
+        return FileResponse(requested_file)
 
-#     return FileResponse(os.path.join(dist_directory, "index.html"))
+    return FileResponse(os.path.join(dist_directory, "index.html"))

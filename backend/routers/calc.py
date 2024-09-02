@@ -4,10 +4,10 @@ from infrastructure.websocket import websocket_manager, WebSocketManager
 import dask.array as da
 import cupy as cp
 
-another_router = APIRouter()
+calc_router = APIRouter()
 
 
-@another_router.get("/calc")
+@calc_router.get("/calc")
 async def gpu_calculate():
     try:
         x = da.from_array(cp.random.rand(100, 100), chunks=(100, 100))
@@ -21,7 +21,7 @@ async def gpu_calculate():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@another_router.get("/send/{client_id}")
+@calc_router.get("/send/{client_id}")
 async def send_message(
     client_id: str,
     manager: WebSocketManager = Depends(lambda: websocket_manager),
