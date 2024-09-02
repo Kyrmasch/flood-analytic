@@ -5,6 +5,7 @@ import dask.array as da
 import cupy as cp
 from fastapi.staticfiles import StaticFiles
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 client = Client("tcp://localhost:8786")
@@ -23,17 +24,16 @@ if not os.path.exists(assets_directory):
 app.mount("/assets", StaticFiles(directory=assets_directory), name="assets")
 app.mount("/static", StaticFiles(directory=dist_directory), name="static")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/{full_path:path}")
-async def catch_all(full_path: str, request: Request):
-    requested_file = os.path.join(dist_directory, full_path)
-    if os.path.exists(requested_file) and os.path.isfile(requested_file):
-        return FileResponse(requested_file)
 
-    return FileResponse(os.path.join(dist_directory, "index.html"))
-
-
-@app.get("/gpu-calculate")
+@app.get("/calc")
 async def gpu_calculate():
     try:
         x = da.from_array(cp.random.rand(100, 100), chunks=(100, 100))
@@ -45,3 +45,12 @@ async def gpu_calculate():
         return {"result": result_cpu.tolist()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/{full_path:path}")
+async def catch_all(full_path: str, request: Request):
+    requested_file = os.path.join(dist_directory, full_path)
+    if os.path.exists(requested_file) and os.path.isfile(requested_file):
+        return FileResponse(requested_file)
+
+    return FileResponse(os.path.join(dist_directory, "index.html"))
