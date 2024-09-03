@@ -1,1 +1,2 @@
 rmm_log.txt*
+backend/migrations/versions/*
