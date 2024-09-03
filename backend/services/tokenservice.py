@@ -5,6 +5,9 @@ from usecases.token.deactivaterefresh import deactivate_refresh_token
 from usecases.token.getrefresh import get_refresh_token
 from usecases.token.createrefresh import create_refresh_token
 from infrastructure.auth import auth_manager
+import logging
+
+logging.getLogger("passlib").setLevel(logging.ERROR)
 
 
 class TokenService:
@@ -36,6 +39,3 @@ class TokenService:
             _, new_refresh_token = self.create_tokens(user.id)
             return new_refresh_token
         return None
-
-
-token_service = TokenService()

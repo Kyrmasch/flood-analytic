@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from routers.ws import websocket_router
-from routers.calc import calc_router
+from routers.router import router
 
 app = FastAPI()
 
@@ -32,7 +32,7 @@ app.add_middleware(
 )
 
 app.include_router(websocket_router, prefix="/ws")
-app.include_router(calc_router, prefix="/api")
+app.include_router(router, prefix="/api")
 
 
 @app.get("/{full_path:path}")
