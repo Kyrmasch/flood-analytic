@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
-
-from usecases.token.getrefresh import get_refresh_token
+from usecases.token.get_refresh import get_refresh_token
 
 
 def deactivate_refresh_token(db: Session, token: str):

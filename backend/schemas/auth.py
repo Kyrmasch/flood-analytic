@@ -1,5 +1,11 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, ConfigDict
+from typing import List, Optional
+
+
+class Role(BaseModel):
+    name: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Token(BaseModel):
@@ -14,6 +20,10 @@ class TokenData(BaseModel):
 class User(BaseModel):
     username: str
     email: str
+
+    roles: List[Role] = []
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserInDB(User):

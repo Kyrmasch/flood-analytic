@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from usecases.user.createuser import create_user
-from usecases.user.getuser import get_user_by_username
+from usecases.user.create_user import create_user
+from usecases.user.get_user import get_user_by_username
 from infrastructure.auth import auth_manager
 
 
