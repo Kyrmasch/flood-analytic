@@ -1,0 +1,14 @@
+.login {
+  @apply min-h-screen flex;
+  .left {
+    @apply bg-bg-image flex-grow min-h-screen bg-cover bg-left;
+
+    .title {
+      @apply text-white mx-12 flex items-center h-full text-6xl max-w-[255px] flex-grow;
+    }
+  }
+
+  .right {
+    @apply w-[500px] h-full bg-white flex min-h-screen;
+  }
+}
