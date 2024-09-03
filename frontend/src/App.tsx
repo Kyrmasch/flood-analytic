@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import "./App.scss";
 import { useWebSocket } from "./domain/contexts/WebSocketContext";
 import { useGetCalcQuery } from "./domain/store/api/calc";
+import { useMeQuery } from "./domain/store/api/auth";
 
 function App() {
   const { setMessageHandler } = useWebSocket();
   const calcApi = useGetCalcQuery(null, { refetchOnMountOrArgChange: true });
+  const meApi = useMeQuery(null, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     setMessageHandler((message) => {
@@ -13,42 +15,125 @@ function App() {
     });
   }, [setMessageHandler]);
 
+  const logOut = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
   return (
     <>
-      <div
-        id="banner"
-        tabIndex={-1}
-        className="flex fixed z-50 gap-8 justify-between items-start py-3 px-4 w-full bg-gray-50 border border-b border-gray-200 sm:items-center dark:border-gray-700 lg:py-4 dark:bg-gray-800"
-      >
-        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          Floood-analitic -
-          <a
-            className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline"
-            href="#"
-          >
-            &nbsp; dask-cuda
-          </a>{" "}
-          {calcApi.data && calcApi.data.result.length}
-        </p>
-        <button
-          data-collapse-toggle="banner"
-          type="button"
-          className="flex items-center text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
-      </div>
+      <header>
+        <nav className="bg-white border-b border-gray-200 dark:bg-gray-800">
+          <div className="flex justify-between items-center mx-auto max-w-7xl px-4 py-2">
+            <a href="https://flowbite.com" className="flex items-center">
+              <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                Flood
+              </span>
+            </a>
+            <div className="flex items-center space-x-6">
+              <button
+                onClick={logOut}
+                className="text-[1em] font-medium text-primary-600 dark:text-primary-500 hover:underline hidden sm:block"
+              >
+                Выход
+              </button>
+            </div>
+          </div>
+        </nav>
+        <nav className="bg-gray-50 dark:bg-gray-700">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <ul className="flex space-x-8 text-gray-900 dark:text-white">
+              <li>
+                <a href="#" className="hover:underline">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Company
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Team
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Features
+                </a>
+              </li>
+              <li className="hidden md:block">
+                <a href="#" className="hover:underline">
+                  Marketplace
+                </a>
+              </li>
+              <li className="hidden md:block">
+                <a href="#" className="hover:underline">
+                  Resources
+                </a>
+              </li>
+              <li className="hidden md:block">
+                <a href="#" className="hover:underline">
+                  {meApi.data && meApi.data.username}
+                </a>
+              </li>
+              <li className="hidden md:block">
+                <a href="#" className="hover:underline">
+                  {calcApi.data && calcApi.data.result.length}
+                </a>
+              </li>
+            </ul>
+            <div
+              id="dropdown"
+              className="hidden absolute bg-white shadow-lg rounded-lg mt-2 py-2"
+            >
+              <ul className="text-sm text-gray-700 dark:text-gray-200">
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    Marketplace
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    Resources
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    Forum
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
     </>
   );
 }

@@ -7,7 +7,7 @@ export default {
         'bg-image': "url('/bg-image.png')",
       },
       fontFamily: {
-        'sans': ['Helvetica', 'Arial', 'sans-serif']
+        'sans': ['Segoe UI Light', 'Segoe', 'SegoeUI-Light-final', 'Tahoma', 'Helvetica, Arial', 'sans-serif']
       }
     },
   },

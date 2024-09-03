@@ -10,5 +10,33 @@
 
   .right {
     @apply w-[500px] h-full bg-white flex min-h-screen;
+
+    #contentWrapper {
+      @apply flex flex-col min-h-screen overflow-hidden;
+
+      #content {
+        @apply flex-grow mx-auto mb-[-55px] px-[50px] pr-[150px];
+
+        #header {
+          @apply text-left py-4 text-4xl pt-[90px] mb-[60px] min-h-[100px] overflow-hidden;
+        }
+
+        #workArea {
+          @apply mb-[90px] w-[350px];
+
+          #authArea {
+            #loginArea {
+              #loginMessage {
+                @apply text-[.9em]  mb-[30px];
+              }
+            }
+
+            #submitButton {
+              @apply px-3 py-2 text-[0.8em] w-[100px] font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
+            }
+          }
+        }
+      }
+    }
   }
 }
