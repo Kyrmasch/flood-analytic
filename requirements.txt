@@ -6,3 +6,6 @@ fastapi
 'uvicorn[standard]'
 pynvml==11.4.1
 rmm-cu12
+python-jose[cryptography]
+passlib[bcrypt]
+sqlalchemy

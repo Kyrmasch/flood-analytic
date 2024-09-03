@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
-from dask.distributed import Client
 
 from fastapi.staticfiles import StaticFiles
 import os
@@ -9,7 +8,6 @@ from routers.ws import websocket_router
 from routers.calc import calc_router
 
 app = FastAPI()
-client = Client("tcp://localhost:8786")
 
 dist_directory = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "frontend", "dist"
