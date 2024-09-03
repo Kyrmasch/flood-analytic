@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi import FastAPI, HTTPException, Request
+from deps import get_current_user
+from schemas.auth import User as UserSchema
 from infrastructure.websocket import websocket_manager, WebSocketManager
 import dask.array as da
 import cupy as cp
@@ -9,8 +11,10 @@ calc_router = APIRouter()
 
 
 @calc_router.get("/calc")
-async def gpu_calculate(dc: DaskManager = Depends(lambda: dask_manager)):
-    print(dc.client.id)
+async def gpu_calculate(
+    dc: DaskManager = Depends(lambda: dask_manager),
+    current_user: UserSchema = Depends(get_current_user),
+):
     try:
         x = da.from_array(cp.random.rand(100, 100), chunks=(100, 100))
         result = (x @ x.T).sum(axis=0).compute()
