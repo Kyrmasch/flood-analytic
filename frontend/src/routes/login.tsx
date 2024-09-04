@@ -3,11 +3,13 @@ import "./login.scss";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
 import { ILogin } from "../domain/interfaces/auth";
+import { useState } from "react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-
   const [loginApi] = useLoginMutation({});
+
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="login">
@@ -61,7 +63,9 @@ export default function LoginPage() {
                             }
 
                             if (response.error) {
-                              alert("Не верный логин или пароль");
+                              setError("Не верный логин или пароль");
+                            } else {
+                              setError(null);
                             }
                           })
                           .catch((error) => {
@@ -74,8 +78,11 @@ export default function LoginPage() {
                     }}
                   >
                     <Form>
-                      <div id="error" className="hidden text-red-600 text-sm">
-                        <span id="errorText"></span>
+                      <div
+                        id="error"
+                        className="text-red-600 text-sm mb-2 font-semibold"
+                      >
+                        <span id="errorText">{error ? error : ""}</span>
                       </div>
                       <div id="formsAuthenticationArea">
                         <div id="userNameArea">

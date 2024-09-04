@@ -8,6 +8,10 @@ export default {
       },
       fontFamily: {
         'sans': ['Segoe UI Light', 'Segoe', 'SegoeUI-Light-final', 'Tahoma', 'Helvetica, Arial', 'sans-serif']
+      },
+      colors: {
+        primary: '#5c6ac4',
+        secondary: '#ecc94b',
       }
     },
   },

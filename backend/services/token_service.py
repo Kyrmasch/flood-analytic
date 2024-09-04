@@ -15,7 +15,7 @@ class TokenService:
         self.db = db
 
     def create_tokens(self, user_id: int):
-        access_token_expires = timedelta(minutes=1)
+        access_token_expires = timedelta(minutes=60)
         access_token = auth_manager.create_access_token(
             data={"sub": str(user_id)}, expires_delta=access_token_expires
         )

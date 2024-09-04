@@ -1,0 +1,39 @@
+.container {
+  @apply relative w-full max-w-md max-h-full;
+
+  .dialog {
+    @apply relative bg-white rounded-lg shadow;
+
+    .head {
+      @apply flex items-start justify-between p-4 border-b rounded-t;
+
+      .title {
+        @apply text-xl font-semibold text-gray-900;
+      }
+
+      button {
+        @apply text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center;
+      }
+    }
+
+    .question {
+      @apply p-6 space-y-6;
+
+      .text {
+        @apply text-base leading-relaxed text-gray-500 text-center;
+      }
+    }
+
+    .actions {
+      @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600 justify-end;
+
+      .yes {
+        @apply inline-flex items-center px-5 py-2.5 ml-2 text-sm font-medium text-white rounded-lg hover:ring-2 hover:outline-none cursor-pointer transform active:scale-95 transition-transform;
+      }
+
+      .no {
+        @apply text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10;
+      }
+    }
+  }
+}

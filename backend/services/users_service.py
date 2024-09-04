@@ -18,3 +18,6 @@ class UserService:
     def create_new_user(self, username: str, email: str, password: str):
         hashed_password = auth_manager.get_password_hash(password)
         return create_user(self.db, username, email, hashed_password)
+
+    def generate_password(self, password: str):
+        return auth_manager.get_password_hash(password)

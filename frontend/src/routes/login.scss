@@ -27,12 +27,12 @@
           #authArea {
             #loginArea {
               #loginMessage {
-                @apply text-[.9em]  mb-[30px];
+                @apply text-[.9em]  mb-[20px];
               }
             }
 
             #submitButton {
-              @apply px-3 py-2 text-[0.8em] w-[100px] font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
+              @apply px-3 py-2 text-[0.8em] w-[100px] font-medium text-center text-white bg-primary rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
             }
           }
         }

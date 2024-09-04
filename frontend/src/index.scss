@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+._blur {
+  @apply bg-gray-900 bg-opacity-40 dark:bg-opacity-80 fixed inset-0 z-40;
+  backdrop-filter: blur(3px);
+}
