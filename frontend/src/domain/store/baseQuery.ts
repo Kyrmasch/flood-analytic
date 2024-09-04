@@ -5,14 +5,13 @@ import type {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 import { IToken } from "../interfaces/token";
-import { isTokenExpired } from "../../utils/utils";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://127.0.0.1:8000/api/",
+  baseUrl: "api/",
   prepareHeaders: (headers, {}) => {
     const token = localStorage.getItem("token");
 
-    if (token && !isTokenExpired(token)) {
+    if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
 
@@ -22,13 +21,13 @@ const baseQuery = fetchBaseQuery({
 
 const refreshAuthToken = async (api: any, extraOptions: any) => {
   const token = localStorage.getItem("token");
-  if (!token || isTokenExpired(token)) {
+  if (!token) {
     window.location.href = "/login";
     return null;
   }
 
   const refreshResponse = await baseQuery(
-    { url: "/api/auth/refresh", method: "POST", body: { token } },
+    { url: "/auth/refresh", method: "POST", credentials: "include" },
     api,
     extraOptions
   );

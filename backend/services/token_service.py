@@ -15,7 +15,7 @@ class TokenService:
         self.db = db
 
     def create_tokens(self, user_id: int):
-        access_token_expires = timedelta(minutes=30)
+        access_token_expires = timedelta(minutes=1)
         access_token = auth_manager.create_access_token(
             data={"sub": str(user_id)}, expires_delta=access_token_expires
         )
@@ -36,6 +36,6 @@ class TokenService:
         user = self.verify_refresh_token(token)
         if user:
             deactivate_refresh_token(self.db, token)
-            _, new_refresh_token = self.create_tokens(user.id)
-            return new_refresh_token
-        return None
+            new_access_token, new_refresh_token = self.create_tokens(user.id)
+            return new_access_token, new_refresh_token
+        return None, None

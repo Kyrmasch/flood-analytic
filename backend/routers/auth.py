@@ -67,17 +67,17 @@ async def refresh_access_token(
             detail="Refresh token not provided",
         )
 
-    new_refresh_token = token_service.rotate_refresh_token(refresh_token)
+    new_access_token, new_refresh_token = token_service.rotate_refresh_token(
+        refresh_token
+    )
     if not new_refresh_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired refresh token",
         )
 
-    access_token = token_service.create_tokens(new_refresh_token)[0]
-
     response = JSONResponse(
-        content={"access_token": access_token, "token_type": "bearer"}
+        content={"access_token": new_access_token, "token_type": "bearer"}
     )
     response.set_cookie(
         key="refresh_token",

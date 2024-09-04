@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import "./App.scss";
 import { useWebSocket } from "./domain/contexts/WebSocketContext";
 import { useGetCalcQuery } from "./domain/store/api/calc";
-import { useMeQuery } from "./domain/store/api/auth";
+import { useUser } from "./domain/contexts/UserContext";
 
 function App() {
   const { setMessageHandler } = useWebSocket();
+  const user = useUser();
   const calcApi = useGetCalcQuery(null, { refetchOnMountOrArgChange: true });
-  const meApi = useMeQuery(null, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     setMessageHandler((message) => {
@@ -75,7 +75,7 @@ function App() {
               </li>
               <li className="hidden md:block">
                 <a href="#" className="hover:underline">
-                  {meApi.data && meApi.data.username}
+                  {user && user.username}
                 </a>
               </li>
               <li className="hidden md:block">
