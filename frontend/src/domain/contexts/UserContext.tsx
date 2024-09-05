@@ -18,6 +18,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   });
 
   if (isLoading) return <></>;
+  if (!meData) return <></>;
 
   return (
     <UserContext.Provider value={{ user: meData }}>
