@@ -1,9 +1,14 @@
 import { useRef } from "react";
 import { useUser } from "../domain/contexts/UserContext";
 import DialogYesNo, { IDialogYesNoRef } from "./dialogs/dialogYesNo";
+import { useAppDispatch } from "../domain/store/hook";
+import { setToken } from "../domain/store/slices/baseSlice";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const user = useUser();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const dialogYesNoRef = useRef<IDialogYesNoRef>(null);
 
   const logOut = () => {
@@ -11,8 +16,8 @@ function Header() {
       title: "Выход",
       question: "Вы действительно хотите выйти?",
       yes: () => {
-        localStorage.removeItem("token");
-        window.location.reload();
+        dispatch(setToken(null));
+        navigate("/login");
       },
       not: () => {},
     });

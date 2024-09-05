@@ -4,9 +4,13 @@ import { Formik, Field, Form, FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
 import { ILogin } from "../domain/interfaces/auth";
 import { useState } from "react";
+import { useAppDispatch } from "../domain/store/hook";
+import { setToken } from "../domain/store/slices/baseSlice";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [loginApi] = useLoginMutation({});
 
   const [error, setError] = useState<string | null>(null);
@@ -51,14 +55,8 @@ export default function LoginPage() {
                             if (response.data) {
                               if (!response.data) {
                               } else {
-                                if (navigate) {
-                                  localStorage.setItem(
-                                    "token",
-                                    response.data.access_token
-                                  );
-
-                                  navigate("/");
-                                }
+                                dispatch(setToken(response.data.access_token));
+                                navigate("/");
                               }
                             }
 

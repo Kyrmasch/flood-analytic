@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import { coreApi } from "./api/api";
 import { CookieStorage } from "./cookieStorage";
+import core from "./slices/baseSlice";
 
 const persistConfig = {
   key: "flood_v1.0.0",
@@ -10,6 +11,7 @@ const persistConfig = {
 };
 
 export const rootReducer = combineReducers({
+  core: core,
   [coreApi.reducerPath]: coreApi.reducer,
 });
 
