@@ -1,4 +1,4 @@
-import { CookieAttributes } from "node_modules/typescript-cookie/dist/types";
+import { CookieAttributes } from "../../../node_modules/typescript-cookie/dist/types";
 import { Cookies } from "typescript-cookie";
 
 export class CookieStorage {

@@ -1,6 +1,6 @@
-import { IUser } from "src/domain/interfaces/auth";
+import { IUser } from "../../interfaces/auth";
 import { coreApi } from "./api";
-import { IToken } from "src/domain/interfaces/token";
+import { IToken } from "../../interfaces/token";
 
 export const authApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({

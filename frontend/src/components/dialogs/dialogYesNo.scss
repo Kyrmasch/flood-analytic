@@ -25,7 +25,7 @@
     }
 
     .actions {
-      @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600 justify-end;
+      @apply flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b justify-end;
 
       .yes {
         @apply inline-flex items-center px-5 py-2.5 ml-2 text-sm font-medium text-white rounded-lg hover:ring-2 hover:outline-none cursor-pointer transform active:scale-95 transition-transform;
