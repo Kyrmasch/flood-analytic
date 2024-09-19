@@ -20,6 +20,8 @@ from infrastructure.database import Base
 from models.user import User
 from models.refreshtoken import RefreshToken
 from models.role import Role, user_roles
+from models.region import Region
+from models.district import District
 
 Base.metadata.tables.keys()
 

@@ -1,0 +1,2 @@
+sudo apt-get install postgis postgresql-14-postgis-3
+CREATE EXTENSION postgis;

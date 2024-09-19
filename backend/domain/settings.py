@@ -18,10 +18,10 @@ class Settings(BaseSettings):
             return v
         return PostgresDsn.build(
             scheme="postgresql",
-            username="postgres",
-            password="postgres",
-            host="89.219.21.146:35432",
-            path=f"test_flood",
+            username="sa",
+            password="Amae9aibai",
+            host="localhost:5432",
+            path=f"flood",
         )
 
 
