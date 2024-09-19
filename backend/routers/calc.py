@@ -10,6 +10,12 @@ from infrastructure.dask import DaskManager, dask_manager
 calc_router = APIRouter()
 
 
+@calc_router.get("/devices")
+async def get_devises(dc: DaskManager = Depends(lambda: dask_manager)):
+    list = dc._devices()
+    return {"devices": list}
+
+
 @calc_router.get("/calc")
 async def gpu_calculate(
     dc: DaskManager = Depends(lambda: dask_manager),
