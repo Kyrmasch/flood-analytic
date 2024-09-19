@@ -6,3 +6,8 @@
   @apply bg-gray-900 bg-opacity-40 fixed inset-0 z-40;
   backdrop-filter: blur(3px);
 }
+
+.leaflet-attribution-flag {
+  display: none !important;
+  visibility: hidden;
+}

@@ -22,6 +22,8 @@ class GeoManager:
                     "properties": {
                         "name": region_dto.name,
                         "kato": region_dto.kato,
+                        "x": region_dto.centroid.x,
+                        "y": region_dto.centroid.y,
                     },
                     "geometry": {
                         "type": "Polygon",
@@ -41,6 +43,8 @@ class GeoManager:
                     "properties": {
                         "name": region_dto.name,
                         "kato": region_dto.kato,
+                        "x": region_dto.centroid.x,
+                        "y": region_dto.centroid.y,
                     },
                     "geometry": mapping(geometry),
                 }

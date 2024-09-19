@@ -46,6 +46,7 @@ async def get_geo_district(
                 district.name,
                 0,
                 None,
+                geometry.centroid,
             ),
             geometry=geometry,
         )
@@ -69,6 +70,7 @@ async def get_geo_region(
                 region.name_ru,
                 region.kato,
                 polygon,
+                polygon.centroid,
             )
         )
 
