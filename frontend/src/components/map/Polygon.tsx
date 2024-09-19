@@ -5,7 +5,7 @@ import { LatLngExpression, PathOptions } from "leaflet";
 
 export interface IPolygon {
   geometries: Geometry[];
-  properties: Properties | undefined;
+  properties?: Properties | undefined;
   options: PathOptions | undefined;
 }
 
