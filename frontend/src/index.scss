@@ -11,3 +11,7 @@
   display: none !important;
   visibility: hidden;
 }
+
+.leaflet-pane {
+  z-index: 20 !important;
+}

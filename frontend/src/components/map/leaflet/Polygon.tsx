@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { Polygon, Popup } from "react-leaflet";
-import { Geometry, Properties } from "../../domain/interfaces/geo";
+import { Geometry, Properties } from "../../../domain/interfaces/geo";
 import { LatLngExpression, PathOptions } from "leaflet";
 
 export interface IPolygon {

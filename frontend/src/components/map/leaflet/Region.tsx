@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle } from "react";
-import { useGetRegionQuery } from "../../domain/store/api/geo";
+import { useGetRegionQuery } from "../../../domain/store/api/geo";
 import MapPolygon from "./Polygon";
-import { getRandomColor } from "../../utils/utils";
+import { getRandomColor } from "../../../utils/utils";
 
 export interface IRegion {
   index: number;

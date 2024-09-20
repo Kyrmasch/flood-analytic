@@ -1,7 +1,7 @@
 import { LatLngExpression } from "leaflet";
 import { forwardRef, useImperativeHandle } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { GeoJSON } from "../../domain/interfaces/geo";
+import { GeoJSON } from "../../../domain/interfaces/geo";
 import MapPolygon from "./Polygon";
 import Region from "./Region";
 
