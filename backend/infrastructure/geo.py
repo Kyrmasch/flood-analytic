@@ -1,6 +1,7 @@
 from shapely import Polygon, wkt
 from shapely.geometry import mapping
 from infrastructure.dto.geo_json_dto import GeoJsonDto
+import geopandas as gpd
 
 
 class GeoManager:
@@ -13,43 +14,17 @@ class GeoManager:
         return None
 
     def create_geojson(self, region_dto: GeoJsonDto):
-        return {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "id": str(region_dto.id),
-                    "type": "Feature",
-                    "properties": {
-                        "name": region_dto.name,
-                        "kato": region_dto.kato,
-                        "x": region_dto.centroid.x,
-                        "y": region_dto.centroid.y,
-                    },
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [list(region_dto.coordinates.exterior.coords)],
-                    },
-                }
-            ],
-        }
-
-    def create_geojson_by_geometry(self, region_dto: GeoJsonDto, geometry):
-        return {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "id": str(region_dto.id),
-                    "type": "Feature",
-                    "properties": {
-                        "name": region_dto.name,
-                        "kato": region_dto.kato,
-                        "x": region_dto.centroid.x,
-                        "y": region_dto.centroid.y,
-                    },
-                    "geometry": mapping(geometry),
-                }
-            ],
-        }
+        dt = gpd.GeoDataFrame(
+            {
+                "name": [region_dto.name],
+                "kato": [region_dto.kato],
+                "x": [region_dto.polygon.centroid.x],
+                "y": [region_dto.polygon.centroid.y],
+            },
+            geometry=[region_dto.polygon],
+            crs="EPSG:4326",
+        )
+        return dt.to_geo_dict()
 
 
 geo_manager = GeoManager()

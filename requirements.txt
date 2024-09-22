@@ -14,3 +14,4 @@ alembic
 python-multipart
 geopandas
 geoalchemy2
+earthengine-api

@@ -1,5 +1,7 @@
 from typing import List
 
+from shapely import Polygon
+
 
 class GeoJsonDto:
     def __init__(
@@ -7,11 +9,11 @@ class GeoJsonDto:
         region_id: int,
         name: str,
         kato: int,
-        coordinates: List,
+        polygon: Polygon,
         centroid,
     ):
         self.id = region_id
         self.name = name
         self.kato = kato
-        self.coordinates = coordinates
+        self.polygon = polygon
         self.centroid = centroid

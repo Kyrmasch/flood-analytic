@@ -8,6 +8,7 @@ from infrastructure.geo import GeoManager, geo_manager
 from sqlalchemy.orm import Session
 import geopandas as gpd
 from shapely.errors import TopologicalError
+from shapely.geometry import mapping
 
 geo_router = APIRouter()
 
@@ -38,17 +39,16 @@ async def get_geo_district(
                 continue
 
         gdf = gpd.GeoDataFrame(geometry=geometries)
-        geometry = gdf.unary_union
+        polygon = gdf.union_all()
 
-        return geo.create_geojson_by_geometry(
+        return geo.create_geojson(
             GeoJsonDto(
                 id,
                 district.name,
                 0,
-                None,
-                geometry.centroid,
+                polygon,
+                polygon.centroid,
             ),
-            geometry=geometry,
         )
 
     return {}
