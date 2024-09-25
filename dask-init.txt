@@ -1,2 +1,3 @@
 dask-scheduler
 dask-cuda-worker tcp://localhost:8786 --nthreads 1 --memory-limit 0 --rmm-pool-size 1GB
+tippecanoe -o rivers_vko.mbtiles ./files_3/clipped_polygons.geojson

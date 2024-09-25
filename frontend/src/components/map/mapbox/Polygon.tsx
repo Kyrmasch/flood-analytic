@@ -40,7 +40,7 @@ export const addPolygon = (layer: string, props: IBoxPolygon) => {
     source: layer,
     layout: {},
     paint: {
-      "line-color": "#5c6ac4",
+      "line-color": "tomato",
       "line-width": 2,
     },
   });
@@ -51,8 +51,8 @@ export const addPolygon = (layer: string, props: IBoxPolygon) => {
       .setLngLat([props.properties.x, props.properties.y])
       .setHTML(
         `<strong>${props.properties.name}</strong><br>KATO: ${props.properties.kato}<br>Координаты: [${props.properties.x}, ${props.properties.y}]`
-      )
-      .addTo(props.map);
+      );
+    //.addTo(props.map);
   }
 };
 

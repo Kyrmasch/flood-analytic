@@ -33,6 +33,24 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
         style: "mapbox://styles/mapbox/satellite-streets-v12",
       });
 
+      map.current.on("load", function () {
+        map.current?.addSource("rivers", {
+          type: "vector",
+          url: "mapbox://kyrmasch.6q9sqj8y",
+        });
+
+        map.current?.addLayer({
+          id: "rivers",
+          type: "fill",
+          source: "rivers",
+          "source-layer": "clipped_polygons",
+          paint: {
+            "fill-color": "#0077ff",
+            "fill-opacity": 0.6,
+          },
+        });
+      });
+
       map.current.on("style.load", () => {
         map.current?.addSource("mapbox-dem", {
           type: "raster-dem",

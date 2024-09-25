@@ -12,7 +12,7 @@ import { MapEnum } from "./domain/contexts/enums/MapEnum";
 import MapBox from "./components/map/mapbox/Map";
 
 function App() {
-  const [mapType, _] = useState<MapEnum>(MapEnum.Leaflet);
+  const [mapType, _] = useState<MapEnum>(MapEnum.MapBox);
   const { setMessageHandler } = useWebSocket();
   const { data: geo } = useGetDistrictQuery(
     { index: 1 },
