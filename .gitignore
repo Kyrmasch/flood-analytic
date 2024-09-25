@@ -1,6 +1,4 @@
 rmm_log.txt*
 backend/migrations/versions/*
 terra-agronomic-652628374bcb.json
-experiments/files/*
-experiments/files_2/*
-experiments/files_3/*
+backend/files/*

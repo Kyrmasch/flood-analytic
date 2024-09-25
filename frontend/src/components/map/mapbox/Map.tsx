@@ -34,16 +34,16 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
       });
 
       map.current.on("load", function () {
-        map.current?.addSource("rivers", {
+        map.current?.addSource("water", {
           type: "vector",
-          url: "mapbox://kyrmasch.6q9sqj8y",
+          url: "mapbox://kyrmasch.1m3pfp0t",
         });
 
         map.current?.addLayer({
-          id: "rivers",
+          id: "water",
           type: "fill",
-          source: "rivers",
-          "source-layer": "clipped_polygons",
+          source: "water",
+          "source-layer": "water",
           paint: {
             "fill-color": "#0077ff",
             "fill-opacity": 0.6,

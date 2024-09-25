@@ -25,6 +25,18 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/backend"
             }
+        },
+        {
+            "name": "Union",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/union.py",
+            "jinja": true,
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/backend"
+            }
         }
+        
     ]
 }
