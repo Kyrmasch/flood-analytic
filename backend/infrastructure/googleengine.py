@@ -14,9 +14,20 @@ class EeManager:
             "/root/flood/flood-analitic/terra-agronomic-652628374bcb.json",
         )
         self.dataset = "JRC/GSW1_4/GlobalSurfaceWater"
+        self.dataset_collection = "JRC/GSW1_4/MonthlyHistory"
+        self.base_dir = os.path.join(os.getcwd(), "files/tiles")
 
-        current_dir = os.getcwd()
-        self.base_dir = os.path.join(current_dir, "files/tiles")
+    def _date_in_dataset(self, dataset_name: str):
+        ee.Initialize(self.credentials)
+        collection = ee.ImageCollection(dataset_name)
+        date_range = collection.reduceColumns(
+            ee.Reducer.minMax(), ["system:time_start"]
+        ).getInfo()
+
+        return (
+            ee.Date(date_range["min"]).format().getInfo(),
+            ee.Date(date_range["max"]).format().getInfo(),
+        )
 
     def create_grid(self, region, scale):
         bounds = region.bounds().coordinates().get(0).getInfo()
@@ -52,24 +63,29 @@ class EeManager:
         print(f"Всего tiles: {len(grid)}")
         return ee.FeatureCollection(grid)
 
-    def is_water_sectors(self, sector, water_mask):
-        clipped_water = water_mask.clip(sector)
-        water_stats = clipped_water.reduceRegion(
+    def is_include_sectors(self, sector, mask):
+        clipped_water = mask.clip(sector)
+        band_names = mask.bandNames().getInfo()
+        if not band_names:
+            raise ValueError("The water_mask does not contain any bands.")
+        band_name = "occurrence" if "occurrence" in band_names else band_names[0]
+
+        stats = clipped_water.reduceRegion(
             reducer=ee.Reducer.mean(),
             geometry=sector,
             scale=30,
             maxPixels=1e9,
         )
 
-        mean_water = water_stats.get("occurrence").getInfo()
-        if mean_water is not None and mean_water > 0:
+        mean = stats.get(band_name).getInfo()
+        if mean is not None and mean > 0:
             return True
         return False
 
-    def process_sector(self, i, sector, water_mask, folder=None):
-        is_water = self.is_water_sectors(sector, water_mask)
+    def process_sector(self, i, sector, mask, folder=None):
+        is_water = self.is_include_sectors(sector, mask)
         if is_water:
-            water_polygons = water_mask.clip(sector).reduceToVectors(
+            polygons = mask.clip(sector).reduceToVectors(
                 geometryType="polygon",
                 reducer=ee.Reducer.countEvery(),
                 scale=30,
@@ -77,16 +93,23 @@ class EeManager:
                 maxPixels=1e9,
             )
 
-            if water_polygons.size().getInfo() > 0:
-                water_geojson = water_polygons.getInfo()
+            if polygons.size().getInfo() > 0:
+                geojson = polygons.getInfo()
                 with open(
                     f"{self.base_dir}/{folder}/tile_{i}.geojson",
                     "w",
                 ) as f:
-                    json.dump(water_geojson, f)
+                    json.dump(geojson, f)
                     print(f"Выполнен: {i}")
 
-    def get_tiles(self, geometries: List, folder, area: int = 20000):
+    def get_tiles(
+        self,
+        geometries: List,
+        folder,
+        area: int = 20000,
+        startDate=None,
+        endDate=None,
+    ):
         ee.Initialize(self.credentials)
 
         gdf = gpd.GeoDataFrame(geometry=geometries)
@@ -94,10 +117,20 @@ class EeManager:
 
         union = gpd.GeoDataFrame([1], geometry=[polygon], crs="EPSG:4326")
         geojson = union.geometry[0].__geo_interface__
-
         ee_polygon = ee.Geometry(geojson)
-        gsw = ee.Image("JRC/GSW1_4/GlobalSurfaceWater")
-        water_mask = gsw.select("occurrence").gte(50)
+
+        mask = None
+        if startDate and endDate:
+            collection = ee.ImageCollection(self.dataset_collection).filterDate(
+                startDate, endDate
+            )
+            count = collection.size().getInfo()
+            if count == 0:
+                raise ValueError("Коллекция пуста")
+            mask = collection.max()
+        else:
+            gsw = ee.Image(self.dataset)
+            mask = gsw.select("occurrence").gte(50)
         grid = self.create_grid(ee_polygon, area)
         grid_list = grid.toList(grid.size())
 
@@ -110,13 +143,12 @@ class EeManager:
                         self.process_sector,
                         i,
                         sector,
-                        water_mask,
+                        mask,
                         folder,
                     )
                 )
-
-            for future in as_completed(futures):
-                future.result()
+                for future in as_completed(futures):
+                    future.result()
 
 
 ee_manager = EeManager()
