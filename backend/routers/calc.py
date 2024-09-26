@@ -22,15 +22,17 @@ async def gpu_calculate(
     current_user: UserSchema = Depends(get_current_user_with_role_factory(["admin"])),
 ):
     try:
-        x = da.from_array(cp.random.rand(100, 100), chunks=(100, 100))
-        result = (x @ x.T).sum(axis=0).compute()
-        result_cpu = cp.asnumpy(result)
+        if dc.client:
+            x = da.from_array(cp.random.rand(100, 100), chunks=(100, 100))
+            result = (x @ x.T).sum(axis=0).compute()
+            result_cpu = cp.asnumpy(result)
 
-        cp.get_default_memory_pool().free_all_blocks()
+            cp.get_default_memory_pool().free_all_blocks()
 
-        return {"result": result_cpu.tolist()}
+            return {"result": result_cpu.tolist()}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        pass
+    raise HTTPException(status_code=500, detail=str(e))
 
 
 @calc_router.get("/send/{client_id}")

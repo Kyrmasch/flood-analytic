@@ -1,11 +1,16 @@
 from typing import Any, Coroutine
 from dask.distributed import Client
 import os
+import socket
 
 
 class DaskManager:
     def __init__(self):
-        self.client = Client("tcp://localhost:8786")
+        try:
+            socket.create_connection(("localhost", 8786), timeout=2)
+            self.client = Client("tcp://localhost:8786")
+        except:
+            self.cleint = None
 
     def extract_gpu_name(self, gpu_info: str) -> str:
         lines = gpu_info.strip().split("\n")

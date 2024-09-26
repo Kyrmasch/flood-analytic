@@ -26,10 +26,10 @@ function Header() {
   return (
     <header>
       <nav className="fixed top-0 z-40 w-full bg-white border-b border-gray-200">
-        <div className="flex justify-between items-center mx-auto max-w-7xl px-4 py-2">
+        <div className="flex justify-between items-center mx-auto px-4 py-2">
           <a href="https://flowbite.com" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap ">
-              Flood
+              Flood Analitic
             </span>
           </a>
           <div className="flex items-center space-x-6">
@@ -46,7 +46,7 @@ function Header() {
         </div>
       </nav>
       <nav className="bg-gray-50 fixed top-[2.8rem] z-40 w-full border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="mx-auto px-4 py-4 flex justify-between items-center">
           <ul className="flex space-x-8 text-gray-900 ">
             <li>
               <a href="#" className="hover:underline">

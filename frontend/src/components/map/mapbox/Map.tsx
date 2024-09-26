@@ -3,6 +3,7 @@ import { GeoJSON } from "../../../domain/interfaces/geo";
 import mapboxgl, { LngLatLike, Map } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { addPolygon } from "./Polygon";
+import { addControls } from "./Controls";
 export interface IMapBox {
   geoJson: GeoJSON;
   center: LngLatLike;
@@ -31,6 +32,14 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
         pitch: 0,
         bearing: 41,
         style: "mapbox://styles/mapbox/satellite-streets-v12",
+      });
+
+      addControls({
+        map: map.current,
+        navigation: true,
+        geolocate: true,
+        fullscreen: true,
+        scale: true,
       });
 
       map.current.on("load", function () {
@@ -67,6 +76,12 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
         });
 
         map.current?.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+
+        const layers = map.current?.getStyle();
+        layers?.layers.forEach(function (layer) {
+          if (layer) {
+          }
+        });
       });
 
       return () => map.current?.remove();

@@ -31,7 +31,7 @@ function App() {
     <div className="flex flex-col h-screen justify-between">
       <Header />
       <Sidebar />
-      <main className="p-4 md:ml-64 h-auto pt-[7rem] min-h-screen">
+      <main className="p-1 md:ml-64 h-auto pt-[6.6rem] min-h-screen">
         {geo && (
           <>
             {mapType == MapEnum.Leaflet && (
