@@ -9,7 +9,7 @@ class UserService:
     def __init__(self, db: Session):
         self.db = db
 
-    def authenticate_user(self, username: str, password: str):
+    async def authenticate_user(self, username: str, password: str):
         user = get_user_by_username(self.db, username)
         if not user or not auth_manager.verify_password(password, user.hashed_password):
             return None

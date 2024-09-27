@@ -9,6 +9,7 @@ from services.users_service import UserService
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+import asyncio
 
 auth_router = APIRouter()
 
@@ -30,7 +31,12 @@ async def login_for_access_token(
     """
     Получить токен доступа
     """
-    user = user_service.authenticate_user(form_data.username, form_data.password)
+    user = await asyncio.create_task(
+        user_service.authenticate_user(
+            form_data.username,
+            form_data.password,
+        )
+    )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
