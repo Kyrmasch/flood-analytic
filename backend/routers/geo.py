@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 import geopandas as gpd
 from shapely.errors import TopologicalError
 from shapely.geometry import mapping
+import asyncio
 
 geo_router = APIRouter()
 
@@ -41,14 +42,16 @@ async def get_geo_district(
         gdf = gpd.GeoDataFrame(geometry=geometries)
         polygon = gdf.union_all()
 
-        return geo.create_geojson(
-            GeoJsonDto(
-                id,
-                district.name,
-                0,
-                polygon,
-                polygon.centroid,
-            ),
+        return await asyncio.create_task(
+            geo.create_geojson(
+                GeoJsonDto(
+                    id,
+                    district.name,
+                    0,
+                    polygon,
+                    polygon.centroid,
+                )
+            )
         )
 
     return {}
@@ -64,13 +67,15 @@ async def get_geo_region(
     if region is not None:
         geom_wkt = db.scalar(region.geom.ST_AsText())
         polygon = geo.polygon_from_wkt(geom_wkt)
-        return geo.create_geojson(
-            GeoJsonDto(
-                id,
-                region.name_ru,
-                region.kato,
-                polygon,
-                polygon.centroid,
+        return await asyncio.create_task(
+            geo.create_geojson(
+                GeoJsonDto(
+                    id,
+                    region.name_ru,
+                    region.kato,
+                    polygon,
+                    polygon.centroid,
+                )
             )
         )
 

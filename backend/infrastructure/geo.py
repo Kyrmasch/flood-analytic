@@ -16,7 +16,7 @@ class GeoManager:
             return wkt.loads(geom_wkt)
         return None
 
-    def create_geojson(
+    async def create_geojson(
         self,
         region_dto: GeoJsonDto,
     ):
