@@ -6,12 +6,15 @@ import { Provider } from "react-redux";
 import { store } from "./domain/store/store.ts";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes.tsx";
+import ErrorBoundary from "./domain/layouts/ErrorBoundary.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <WebSocketProvider>
-        <RouterProvider router={router} />
+        <ErrorBoundary>
+          <RouterProvider router={router} />
+        </ErrorBoundary>
       </WebSocketProvider>
     </Provider>
   </StrictMode>

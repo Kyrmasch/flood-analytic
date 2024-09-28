@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import "./App.scss";
-import { useWebSocket } from "./domain/contexts/WebSocketContext";
-import { useGetDistrictQuery } from "./domain/store/api/geo";
-import Map from "./components/map/leaflet/Map";
+import { useWebSocket } from "../domain/contexts/WebSocketContext";
+import { useGetDistrictQuery } from "../domain/store/api/geo";
+import Map from "../components/map/leaflet/Map";
 import { LatLng } from "leaflet";
 import { LngLatLike } from "mapbox-gl";
 import "leaflet/dist/leaflet.css";
-import { MapEnum } from "./domain/contexts/enums/MapEnum";
-import MapBox from "./components/map/mapbox/Map";
-import Container from "./components/Container";
-import MapHeader from "./components/headers/Map";
+import { MapEnum } from "../domain/contexts/enums/MapEnum";
+import MapBox from "../components/map/mapbox/Map";
+import Container from "../components/Container";
+import MapHeader from "../components/headers/Map";
 
-function App() {
+function MapPage() {
   const [mapType, _] = useState<MapEnum>(MapEnum.MapBox);
   const { setMessageHandler } = useWebSocket();
   const { data: geo } = useGetDistrictQuery(
@@ -66,4 +65,4 @@ function App() {
   );
 }
 
-export default App;
+export default MapPage;

@@ -1,4 +1,4 @@
-import { useRouteError } from "react-router-dom";
+import { Link, useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
   const error: any = useRouteError();
@@ -11,10 +11,13 @@ export default function ErrorPage() {
             500
           </h1>
           <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl ">
-            {error.statusText}
+            {error?.statusText}
           </p>
           <p className="mb-4 text-lg font-light text-gray-500 ">
-            {error.message}
+            {error?.message}
+          </p>
+          <p className="mb-4 text-lg font-light text-gray-500 ">
+            <Link to={"/"}>Назад</Link>
           </p>
         </div>
       </div>

@@ -45,59 +45,6 @@ function Header() {
           </div>
         </div>
       </nav>
-      <nav className="bg-gray-50 fixed top-[2.8rem] z-40 w-full border-b border-gray-200">
-        <div className="mx-auto px-4 py-4 flex justify-between items-center">
-          <ul className="flex space-x-8 text-gray-900 ">
-            <li>
-              <a href="#" className="hover:underline">
-                Главная
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Участки
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Водоемы
-              </a>
-            </li>
-          </ul>
-          <div
-            id="dropdown"
-            className="hidden absolute bg-white shadow-lg rounded-lg mt-2 py-2"
-          >
-            <ul className="text-sm text-gray-700 ">
-              <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                  Marketplace
-                </a>
-              </li>
-              <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                  Resources
-                </a>
-              </li>
-              <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                  Forum
-                </a>
-              </li>
-              <li>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
-                  Support
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
       <DialogYesNo ref={dialogYesNoRef} />
     </header>
   );
