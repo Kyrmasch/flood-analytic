@@ -1,14 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie
-from usecases.role.assign_role_to_user import assign_role_to_user
-from usecases.role.get_role import get_role_by_name
-from usecases.user.get_user import get_user_by_username
 from schemas.auth import Token, User as UserSchema
 from services.token_service import TokenService
-from deps import get_current_user, get_db, get_token_service, get_user_service
+from deps import get_current_user, get_token_service, get_user_service
 from services.users_service import UserService
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
-from sqlalchemy.orm import Session
 import asyncio
 
 auth_router = APIRouter()

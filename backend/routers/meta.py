@@ -5,6 +5,7 @@ from schemas.meta import ColumnMeta, RelationshipMeta, TableMeta
 from sqlalchemy.orm import Session
 from sqlalchemy.inspection import inspect
 from infrastructure.database import Base
+from usecases.metadata.get_meta import get_model_by_tablename
 
 meta_router = APIRouter()
 
@@ -15,14 +16,6 @@ async def get_meta_model(
     current_user: UserSchema = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-
-    def get_model_by_tablename(tablename):
-        for mapper in Base.registry.mappers:
-            cls = mapper.class_
-            if cls.__tablename__ == tablename:
-                return cls
-        return None
-
     model = get_model_by_tablename(tablename)
 
     if model:

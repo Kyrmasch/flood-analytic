@@ -3,6 +3,7 @@ import ErrorPage from "./routes/error-page";
 import LoginPage from "./routes/login";
 import ProtectedLayout from "./domain/layouts/ProtectedLayout";
 import MapPage from "./pages/Map";
+import ReferencePage from "./pages/Reference";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <MapPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "reference",
+        element: <ReferencePage />,
         errorElement: <ErrorPage />,
       },
     ],
