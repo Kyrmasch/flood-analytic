@@ -1,7 +1,7 @@
 import { Modal, ModalInterface } from "flowbite";
 import React, { ReactNode, forwardRef, useImperativeHandle } from "react";
 
-import "./dialogYesNo.scss";
+import "./DialogYesNo.scss";
 import { IDialog } from "../../domain/interfaces/dialog";
 import { CloseModalIcon } from "../svg/closeModal";
 

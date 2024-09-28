@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useUser } from "../domain/contexts/UserContext";
-import DialogYesNo, { IDialogYesNoRef } from "./dialogs/dialogYesNo";
+import DialogYesNo, { IDialogYesNoRef } from "./dialogs/DialogYesNo";
 import { useAppDispatch } from "../domain/store/hook";
 import { setToken } from "../domain/store/slices/baseSlice";
 import { useNavigate } from "react-router-dom";

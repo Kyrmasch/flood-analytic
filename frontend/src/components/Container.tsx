@@ -13,7 +13,7 @@ const Container: React.FC<ContainerProps> = ({ header, main }) => {
       style={{ minHeight: "calc(100vh - 2.8rem)" }}
     >
       <div className="md:ml-64">{header}</div>
-      <main className="flex-grow">{main}</main>
+      <main className="md:ml-64 flex-grow">{main}</main>
     </div>
   );
 };
