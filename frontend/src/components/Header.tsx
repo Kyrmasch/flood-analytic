@@ -29,7 +29,7 @@ function Header() {
         <div className="flex justify-between items-center mx-auto px-4 py-2">
           <a href="https://flowbite.com" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap ">
-              Flood Analitic
+              Flood Analytic
             </span>
           </a>
           <div className="flex items-center space-x-6">
