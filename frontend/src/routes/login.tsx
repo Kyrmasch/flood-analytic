@@ -18,7 +18,7 @@ export default function LoginPage() {
   return (
     <div className="login">
       <div className="left">
-        <h1 className="title">Flood Analytics</h1>
+        <h1 className="title">FLOOD ANALYTIC</h1>
       </div>
       <div className="right">
         <div id="contentWrapper">

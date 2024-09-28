@@ -28,7 +28,7 @@ function App() {
   }, [setMessageHandler]);
 
   return (
-    <div className="flex flex-col h-screen justify-between pt-[2.8rem]">
+    <div className="flex flex-col h-screen justify-between pt-[3rem]">
       <Container
         header={<MapHeader />}
         main={

@@ -7,7 +7,7 @@ export default {
         'bg-image': "url('/bg-image.png')",
       },
       fontFamily: {
-        'sans': ['Segoe UI Light', 'Segoe', 'SegoeUI-Light-final', 'Tahoma', 'Helvetica, Arial', 'sans-serif']
+        'sans': ["Open Sans", "system-ui"]
       },
       colors: {
         primary: '#5c6ac4',

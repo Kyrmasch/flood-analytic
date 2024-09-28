@@ -27,7 +27,7 @@ function MapPage() {
   }, [setMessageHandler]);
 
   return (
-    <div className="flex flex-col h-screen justify-between pt-[2.8rem]">
+    <div className="flex flex-col h-screen justify-between pt-[3.5rem]">
       <Container
         header={<MapHeader />}
         main={

@@ -12,7 +12,7 @@ function ReferencePage() {
   );
 
   return (
-    <div className="flex flex-col h-screen justify-between pt-[2.8rem]">
+    <div className="flex flex-col h-screen justify-between pt-[3.5rem]">
       <Container
         header={<></>}
         main={data && <DefaultTable tableName="regions" data={data} />}

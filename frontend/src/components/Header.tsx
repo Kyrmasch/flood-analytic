@@ -33,9 +33,9 @@ function Header() {
             </span>
           </a>
           <div className="flex items-center space-x-6">
-            <div className="text-[1em] font-semibold text-primary hidden sm:block">
-              {user && user.username}
-            </div>
+          <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+              <span className="font-medium text-gray-600">{user?.username.charAt(0).toUpperCase()}</span>
+          </div>
             <button
               onClick={logOut}
               className="text-[1em] font-semibold text-primary-600 hover:underline hidden sm:block"

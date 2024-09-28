@@ -4,7 +4,7 @@ const Sidebar = () => {
   return (
     <aside
       id="logo-sidebar"
-      className="fixed top-0 left-0 z-30 w-64 h-screen pt-[2.5rem] transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 "
+      className="fixed top-0 left-0 z-30 w-64 h-screen pt-[3rem] transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 "
       aria-label="Sidebar"
     >
       <div className="h-full px-3 pt-4 pb-4 overflow-y-auto bg-gray-50 ">
