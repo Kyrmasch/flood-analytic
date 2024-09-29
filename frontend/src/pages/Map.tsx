@@ -22,7 +22,8 @@ function MapPage() {
 
   useEffect(() => {
     setMessageHandler((message) => {
-      console.log(message);
+      if (message) {
+      }
     });
   }, [setMessageHandler]);
 

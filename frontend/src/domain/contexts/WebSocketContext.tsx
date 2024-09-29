@@ -33,7 +33,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       setSocket(ws);
 
       ws.onopen = () => {
-        console.log('WebSocket соединение установлено');
+        console.log("WebSocket соединение установлено");
       };
 
       ws.onmessage = (event) => {
@@ -44,11 +44,11 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
       ws.onerror = (error) => {
-        console.error('Ошибка WebSocket:', error);
+        console.error("Ошибка WebSocket:", error);
       };
 
       ws.onclose = () => {
-        console.log('WebSocket соединение закрыто');
+        console.log("WebSocket соединение закрыто");
       };
 
       if (clientId == null) {

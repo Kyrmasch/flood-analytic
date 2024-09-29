@@ -9,10 +9,12 @@ import { IPaginatedResponse } from "../../domain/interfaces/data";
 import { useGetMetaQuery } from "../../domain/store/api/meta";
 import { IColumnMeta, ITableMeta } from "../../domain/interfaces/meta";
 import { useTranslation } from "react-i18next";
+import Pagination from "./Pagination";
 
 export interface IDefaultTable<T> {
   tableName: string;
   data: IPaginatedResponse<T>;
+  setOffset: (x: number) => void;
 }
 
 export interface IDefaultTableRef {}
@@ -38,14 +40,15 @@ const DefaultTable = <T,>(
     [props.tableName]
   );
 
+  const [page, setPage] = React.useState<number>(0);
+
   useImperativeHandle(ref, () => ({
     open: open,
   }));
 
   React.useEffect(() => {
-    if (props) {
-    }
-  }, []);
+    props.setOffset(page * props.data.limit);
+  }, [page]);
 
   if (!isSuccess) return <></>;
 
@@ -93,6 +96,12 @@ const DefaultTable = <T,>(
           })}
         </tbody>
       </table>
+      <Pagination
+        currentPage={page}
+        edgePageCount={2}
+        setCurrentPage={setPage}
+        totalPages={props.data.count / props.data.limit}
+      />
     </div>
   );
 };
