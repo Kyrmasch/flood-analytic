@@ -5,6 +5,7 @@ from schemas.data import PaginatedResponse, TableRow
 from sqlalchemy.orm import Session
 from usecases.metadata.get_meta import get_model_by_tablename
 from geoalchemy2.elements import WKBElement
+from sqlalchemy import func
 
 data_router = APIRouter()
 
@@ -37,8 +38,10 @@ async def get_table_data(
     if not model:
         raise HTTPException(status_code=404, detail="Модель не найдена")
 
-    query = select(model).limit(limit).offset(offset)
+    count_query = select(func.count()).select_from(model)
+    total_count = db.execute(count_query).scalar()
 
+    query = select(model).limit(limit).offset(offset)
     result = db.execute(query)
     rows = result.scalars().all()
 
@@ -48,5 +51,5 @@ async def get_table_data(
         data=[TableRow(data=row) for row in data],
         limit=limit,
         offset=offset,
-        count=len(rows),
+        count=total_count,
     )

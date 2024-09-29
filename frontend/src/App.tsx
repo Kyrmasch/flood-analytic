@@ -23,7 +23,8 @@ function App() {
 
   useEffect(() => {
     setMessageHandler((message) => {
-      console.log(message);
+      if (message) {
+      }
     });
   }, [setMessageHandler]);
 

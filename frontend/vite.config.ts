@@ -15,6 +15,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (id.includes("react-router-dom")) {
+            return "react-router";
+          }
+
+          if (id.includes("mapbox-gl")) {
+            return "mapbox";
+          }
+
           if (id.includes("node_modules")) {
             return "vendor";
           }
