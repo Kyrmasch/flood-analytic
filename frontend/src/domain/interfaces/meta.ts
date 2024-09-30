@@ -1,6 +1,7 @@
 export interface IColumnMeta {
   name: string;
   type: string;
+  is_rel?: boolean;
 }
 
 export interface IRelationshipMeta {
