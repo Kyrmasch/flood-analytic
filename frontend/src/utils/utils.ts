@@ -18,3 +18,7 @@ export const getRandomColor = (): string => {
   }
   return color;
 };
+
+export const isObject = (value: any): boolean => {
+  return Object.prototype.toString.call(value) === "[object Object]";
+};

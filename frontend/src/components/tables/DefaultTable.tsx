@@ -10,6 +10,7 @@ import { useGetMetaQuery } from "../../domain/store/api/meta";
 import { IColumnMeta, ITableMeta } from "../../domain/interfaces/meta";
 import { useTranslation } from "react-i18next";
 import Pagination from "./Pagination";
+import { isObject } from "../../utils/utils";
 
 export interface IDefaultTable<T> {
   tableName: string;
@@ -35,7 +36,25 @@ const DefaultTable = <T,>(
 
   const columns = useCallback(
     (table: ITableMeta) => {
-      return table.columns.filter((x) => x.type != "WTKElement");
+      var cols = [...table.columns];
+      table.relationships.map((rel) => {
+        if (rel) {
+          let field = rel.foreign_keys[0];
+          if (field) {
+            let joinIndex = cols.findIndex((x) => x.name == field);
+            if (joinIndex !== -1) {
+              let join: IColumnMeta = {
+                name: rel.relation,
+                type: "VARCHAR",
+                is_rel: true,
+              };
+              cols[joinIndex] = join;
+            }
+          }
+        }
+      });
+
+      return cols;
     },
     [props.tableName]
   );
@@ -49,6 +68,15 @@ const DefaultTable = <T,>(
   React.useEffect(() => {
     props.setOffset(page * props.data.limit);
   }, [page]);
+
+  const getData = (data: Record<string, any>, col: IColumnMeta) => {
+    var value = data[col.name];
+    if (!isObject(value)) return value;
+
+    const relField = Object.entries(value)[1];
+    const [_, fieldValue] = relField;
+    return fieldValue;
+  };
 
   if (!isSuccess) return <></>;
 
@@ -85,7 +113,7 @@ const DefaultTable = <T,>(
                           className="px-6 py-4"
                           key={`${props.tableName}_item_${i}_${y}`}
                         >
-                          {(item.data as Record<string, any>)[col.name]}
+                          {getData(item.data as Record<string, any>, col)}
                         </td>
                       );
                     }
