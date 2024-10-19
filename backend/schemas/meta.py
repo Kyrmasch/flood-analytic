@@ -17,3 +17,8 @@ class TableMeta(BaseModel):
     table_name: str
     columns: List[ColumnMeta]
     relationships: List[RelationshipMeta]
+
+
+class TableItem:
+    name: str
+    description: str

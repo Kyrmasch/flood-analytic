@@ -15,3 +15,8 @@ export interface ITableMeta {
   columns: IColumnMeta[];
   relationships: IRelationshipMeta[];
 }
+
+export interface IItemMeta {
+  name: string;
+  description: string;
+}
