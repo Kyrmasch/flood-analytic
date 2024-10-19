@@ -6,6 +6,8 @@ from geoalchemy2 import Geometry
 
 class Region(Base):
     __tablename__ = "regions"
+    __description__ = "Районы"
+
     id = Column(Integer, primary_key=True, index=True)
     kato = Column(Integer, unique=True, index=True)
     name_ru = Column(String, unique=True, index=True)

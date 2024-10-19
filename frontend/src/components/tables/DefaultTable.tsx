@@ -128,7 +128,12 @@ const DefaultTable = <T,>(
         currentPage={page}
         edgePageCount={2}
         setCurrentPage={setPage}
-        totalPages={props.data.count / props.data.limit}
+        totalPages={
+          props.data.count /
+          (props.data.limit > props.data.count
+            ? props.data.count
+            : props.data.limit)
+        }
       />
     </div>
   );

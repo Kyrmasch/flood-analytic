@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 
 class District(Base):
     __tablename__ = "districts"
+    __description__ = "Области"
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     regions = relationship("Region", back_populates="district")
