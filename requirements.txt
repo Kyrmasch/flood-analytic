@@ -16,3 +16,4 @@ geopandas
 geoalchemy2
 earthengine-api
 asyncio
+sqladmin

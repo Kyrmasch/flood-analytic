@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from admin.app import admin_init
 from routers.ws import websocket_router
 from routers.router import router
 
@@ -34,9 +35,13 @@ app.add_middleware(
 app.include_router(websocket_router, prefix="/ws")
 app.include_router(router, prefix="/api")
 
+admin_init(app)
+
 
 @app.get("/{full_path:path}")
 async def catch_all(full_path: str, request: Request):
+    if full_path.startswith("admin"):
+        return
     requested_file = os.path.join(dist_directory, full_path)
     if os.path.exists(requested_file) and os.path.isfile(requested_file):
         return FileResponse(requested_file)
