@@ -16,4 +16,5 @@ geopandas
 geoalchemy2
 earthengine-api
 asyncio
-sqladmin
+itsdangerous
+starlette-admin
