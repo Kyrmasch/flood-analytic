@@ -2,8 +2,11 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette_admin.auth import AdminConfig, AdminUser, AuthProvider
 from starlette_admin.exceptions import FormValidationError, LoginFailed
+from infrastructure.database import SessionLocal
+from models.user import User
+from services.users_service import UserService
 
-users = {
+roles = {
     "admin": {
         "name": "Admin",
         "avatar": "admin.png",
@@ -25,18 +28,28 @@ class UsernameAndPasswordProvider(AuthProvider):
     ) -> Response:
         if len(username) < 3:
             raise FormValidationError(
-                {"username": "Ensure username has at least 03 characters"}
+                {
+                    "username": "Убедитесь, что имя пользователя содержит не менее 03 символов."
+                }
             )
+        db = SessionLocal()
+        user_service = UserService(db)
+        user: User = await user_service.authenticate_user(
+            username,
+            password,
+        )
+        if user:
+            user_roles = [role.name for role in user.roles]
+            if "admin" in user_roles:
+                request.session.update({"username": username})
+                request.session.update({"role": "admin"})
+                return response
 
-        if username in users and password == "admin":
-            request.session.update({"username": username})
-            return response
-
-        raise LoginFailed("Invalid username or password")
+        raise LoginFailed("Неверное имя пользователя или пароль")
 
     async def is_authenticated(self, request) -> bool:
-        if request.session.get("username", None) in users:
-            request.state.user = users.get(request.session["username"])
+        if request.session.get("role", None) in roles:
+            request.state.user = roles.get(request.session["role"])
             return True
 
         return False

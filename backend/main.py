@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, RedirectResponse
 
 from fastapi.staticfiles import StaticFiles
 import os
@@ -24,6 +24,8 @@ if not os.path.exists(assets_directory):
 app.mount("/assets", StaticFiles(directory=assets_directory), name="assets")
 app.mount("/static", StaticFiles(directory=dist_directory), name="static")
 
+admin_init(app)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -35,13 +37,9 @@ app.add_middleware(
 app.include_router(websocket_router, prefix="/ws")
 app.include_router(router, prefix="/api")
 
-admin_init(app)
-
 
 @app.get("/{full_path:path}")
 async def catch_all(full_path: str, request: Request):
-    if full_path.startswith("admin"):
-        return
     requested_file = os.path.join(dist_directory, full_path)
     if os.path.exists(requested_file) and os.path.isfile(requested_file):
         return FileResponse(requested_file)
