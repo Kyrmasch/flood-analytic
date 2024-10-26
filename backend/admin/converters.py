@@ -29,7 +29,7 @@ class GeomField(BaseField):
         return str("GEOMETRY")
 
 
-class FloodAmaliticConverter(ModelConverter):
+class FloodAnalyticConverter(ModelConverter):
     @converts("geoalchemy2.types.Geometry")
     def conv_currency(self, *args: Any, **kwargs: Any) -> BaseField:
         return GeomField(

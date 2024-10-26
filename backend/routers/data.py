@@ -44,7 +44,7 @@ async def get_table_data(
 
     def wkb_to_geojson(wkb):
         if isinstance(wkb, WKBElement):
-            return "WKBElement"
+            return "GEOMETRY"
         return wkb
 
     model = get_model_by_tablename(tablename)

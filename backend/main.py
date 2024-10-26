@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware import Middleware
 from fastapi.responses import FileResponse, RedirectResponse
 
 from fastapi.staticfiles import StaticFiles
