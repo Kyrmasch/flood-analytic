@@ -8,7 +8,6 @@ from infrastructure.geo import GeoManager, geo_manager
 from sqlalchemy.orm import Session
 import geopandas as gpd
 from shapely.errors import TopologicalError
-from shapely.geometry import mapping
 import asyncio
 
 geo_router = APIRouter()

@@ -1,4 +1,7 @@
-from typing import Optional
+import asyncio
+from json import JSONDecodeError
+from typing import Dict, List, Optional, Sequence
+from fastapi.datastructures import FormData
 from starlette_admin.contrib.sqla.converters import ModelConverter
 from dataclasses import dataclass
 from typing import Any
@@ -12,21 +15,87 @@ from starlette_admin.converters import converts
 from starlette_admin.fields import (
     BaseField,
 )
+from infrastructure.dto.geo_json_dto import GeoJsonDto
+from infrastructure.geo import GeoManager
+from infrastructure.database import SessionLocal
+
+geo = GeoManager()
+db = SessionLocal()
 
 
 @dataclass
 class GeomField(BaseField):
-    maxlength: Optional[int] = None
-    minlength: Optional[int] = None
-    search_builder_type: Optional[str] = "string"
-    input_type: str = "text"
-    class_: str = "field-string form-control"
-    placeholder: Optional[str] = None
+    height: str = "20em"
+    modes: Optional[Sequence[str]] = None
+    render_function_key: str = "json"
+    form_template: str = "forms/json.html"
+    display_template: str = "displays/json.html"
+
+    def __post_init__(self) -> None:
+        if self.modes is None:
+            self.modes = ["view"] if self.read_only else ["tree", "code"]
+        super().__post_init__()
+
+    async def parse_form_data(
+        self, request: Request, form_data: FormData, action: RequestAction
+    ) -> Optional[Dict[str, Any]]:
+        try:
+            value = form_data.get(self.id)
+            return json.loads(value) if value is not None else None  # type: ignore
+        except JSONDecodeError:
+            return None
+
+    def additional_css_links(
+        self, request: Request, action: RequestAction
+    ) -> List[str]:
+        if action.is_form():
+            return [
+                str(
+                    request.url_for(
+                        f"{request.app.state.ROUTE_NAME}:statics",
+                        path="css/jsoneditor.min.css",
+                    )
+                )
+            ]
+        return []
+
+    def additional_js_links(self, request: Request, action: RequestAction) -> List[str]:
+        if action.is_form():
+            return [
+                str(
+                    request.url_for(
+                        f"{request.app.state.ROUTE_NAME}:statics",
+                        path="js/vendor/jsoneditor.min.js",
+                    )
+                )
+            ]
+        return []
 
     async def serialize_value(
-        self, request: Request, value: Any, action: RequestAction
+        self,
+        request: Request,
+        value: Any,
+        action: RequestAction,
     ) -> Any:
-        return str("GEOMETRY")
+        result = None
+        if value is not None:
+            try:
+                geom_wkt = db.scalar(value.ST_AsText())
+                polygon = geo.polygon_from_wkt(geom_wkt)
+                result = await asyncio.create_task(
+                    geo.create_geojson(
+                        GeoJsonDto(
+                            id,
+                            "",
+                            "",
+                            polygon,
+                            polygon.centroid,
+                        )
+                    )
+                )
+            except Exception as e:
+                pass
+        return result
 
 
 class FloodAnalyticConverter(ModelConverter):

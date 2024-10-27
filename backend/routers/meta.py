@@ -1,4 +1,3 @@
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from deps import get_current_user, get_db
 from schemas.auth import User as UserSchema
@@ -45,7 +44,7 @@ async def get_meta_model(
 
 @meta_router.get("/tables")
 async def get_tables(
-    # current_user: UserSchema = Depends(get_current_user),
+    current_user: UserSchema = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     list = []
