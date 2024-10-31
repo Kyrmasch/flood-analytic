@@ -7,7 +7,7 @@ export default {
         'bg-image': "url('/bg-image.png')",
       },
       fontFamily: {
-        'sans': ["Open Sans", "system-ui"]
+        'sans': ['Roboto', 'sans-serif']
       },
       colors: {
         primary: '#5c6ac4',

@@ -11,8 +11,8 @@ API_KEY = "Y-_AFE8mzL0nTvaIQajscOz3zygBjwzSyXVNty6x6gs"
 roles = {
     "admin": {
         "name": "Admin",
-        "avatar": "admin.png",
-        "company_logo_url": "admin.png",
+        "avatar": None,
+        "company_logo_url": None,
         "roles": ["read", "create", "edit", "delete", "action_make_published"],
     },
     "viewer": {"name": "Viewer", "avatar": "guest.png", "roles": ["read"]},
