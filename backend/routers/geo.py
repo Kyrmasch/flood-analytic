@@ -56,6 +56,34 @@ async def get_geo_district(
     return {}
 
 
+@geo_router.get("/regions")
+async def get_geo_regions(
+    id: Optional[int] = Query(None, description="ID Области"),
+    geo: GeoManager = Depends(lambda: geo_manager),
+    db: Session = Depends(get_db),
+):
+    regions = db.query(Region).filter(Region.district_id == id).all()
+    items = []
+    for region in regions:
+        geom_wkt = db.scalar(region.geom.ST_AsText())
+        polygon = geo.polygon_from_wkt(geom_wkt)
+        items.append(
+            await asyncio.create_task(
+                geo.create_geojson(
+                    GeoJsonDto(
+                        id,
+                        region.name_ru,
+                        region.kato,
+                        polygon,
+                        polygon.centroid,
+                    )
+                )
+            )
+        )
+
+    return items
+
+
 @geo_router.get("/region")
 async def get_geo_region(
     id: Optional[int] = Query(None, description="ID региона"),

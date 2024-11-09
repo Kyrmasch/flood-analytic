@@ -1,12 +1,9 @@
 import React from "react";
 import { useGetTablesQuery } from "../../domain/store/api/meta";
 import "./Header.scss";
+import { IHeader } from "./interfaces/IHeader";
 
-export interface IReferenceHeader {
-  OnSelect: (x: string) => void;
-}
-
-const ReferenceHeader = (props: IReferenceHeader) => {
+const ReferenceHeader: React.FC<IHeader> = (props) => {
   const [selected, setSelected] = React.useState<string | null>(null);
   const { data: table, isLoading } = useGetTablesQuery(
     {},
@@ -33,7 +30,7 @@ const ReferenceHeader = (props: IReferenceHeader) => {
         <ul className="flex flex-wrap -mb-px tab">
           {table?.map((meta) => {
             return (
-              <li className="me-2">
+              <li className="me-2" key={`header-item-${meta.name}`}>
                 <a
                   href="#"
                   onClick={() => setSelected(meta.name)}

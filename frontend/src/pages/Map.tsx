@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useWebSocket } from "../domain/contexts/WebSocketContext";
 import { useGetDistrictQuery } from "../domain/store/api/geo";
-import Map from "../components/map/leaflet/Map";
-import { LatLng } from "leaflet";
-import { LngLatLike } from "mapbox-gl";
 import "leaflet/dist/leaflet.css";
-import { MapEnum } from "../domain/contexts/enums/MapEnum";
-import MapBox from "../components/map/mapbox/Map";
 import Container from "../components/Container";
 import MapHeader from "../components/headers/Map";
+import { MapSectionEnum } from "../domain/contexts/enums/MapSectionEnum";
+import WaterSection from "./sections/map/WaterSection";
+import RegionsSection from "./sections/map/RegionsSection";
 
 function MapPage() {
-  const [mapType, _] = useState<MapEnum>(MapEnum.MapBox);
+  const [section, setSection] = useState<MapSectionEnum | string>(
+    MapSectionEnum.Regions
+  );
+
   const { setMessageHandler } = useWebSocket();
   const { data: geo } = useGetDistrictQuery(
     { index: 1 },
@@ -30,34 +31,14 @@ function MapPage() {
   return (
     <div className="flex flex-col h-screen justify-between pt-[3.5rem]">
       <Container
-        header={<MapHeader />}
+        header={<MapHeader OnSelect={setSection} />}
         main={
           geo && (
             <>
-              {mapType == MapEnum.Leaflet && (
-                <Map
-                  center={
-                    new LatLng(
-                      geo.features[0].properties.y,
-                      geo.features[0].properties.x
-                    )
-                  }
-                  geoJson={geo}
-                  zoom={7}
-                />
+              {section == MapSectionEnum.Regions && (
+                <RegionsSection geo={geo} />
               )}
-              {mapType == MapEnum.MapBox && (
-                <MapBox
-                  geoJson={geo}
-                  center={
-                    [
-                      geo.features[0].properties.x,
-                      geo.features[0].properties.y,
-                    ] as LngLatLike
-                  }
-                  zoom={6.8}
-                />
-              )}
+              {section == MapSectionEnum.Waters && <WaterSection geo={geo} />}
             </>
           )
         }

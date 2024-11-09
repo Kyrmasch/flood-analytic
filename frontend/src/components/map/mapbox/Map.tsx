@@ -2,22 +2,25 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { GeoJSON } from "../../../domain/interfaces/geo";
 import mapboxgl, { LngLatLike, Map } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { addPolygon } from "./Polygon";
 import { addControls } from "./Controls";
+
 export interface IMapBox {
   geoJson: GeoJSON;
   center: LngLatLike;
   zoom: number;
+  addLayer?: (map: Map) => void;
 }
 
-export interface IMapBoxRef {}
+export interface IMapBoxRef {
+  getMap: () => Map | null;
+}
 
 const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const map = useRef<null | Map>(null);
 
   useImperativeHandle(ref, () => ({
-    open: open,
+    getMap: () => map.current,
   }));
 
   useEffect(() => {
@@ -43,21 +46,9 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
       });
 
       map.current.on("load", function () {
-        map.current?.addSource("water", {
-          type: "vector",
-          url: "mapbox://kyrmasch.1m3pfp0t",
-        });
-
-        map.current?.addLayer({
-          id: "water",
-          type: "fill",
-          source: "water",
-          "source-layer": "water",
-          paint: {
-            "fill-color": "#0077ff",
-            "fill-opacity": 0.6,
-          },
-        });
+        if (props.addLayer) {
+          props.addLayer(map.current!);
+        }
       });
 
       map.current.on("style.load", () => {
@@ -66,13 +57,6 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
           url: "mapbox://mapbox.mapbox-terrain-dem-v1",
           tileSize: 512,
           maxzoom: 14,
-        });
-
-        addPolygon("district", {
-          map: map.current!,
-          geometries: [props.geoJson.features[0].geometry],
-          options: {},
-          properties: props.geoJson.features[0].properties,
         });
 
         map.current?.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
