@@ -7,6 +7,7 @@ import MapHeader from "../components/headers/Map";
 import { MapSectionEnum } from "../domain/contexts/enums/MapSectionEnum";
 import WaterSection from "./sections/map/WaterSection";
 import RegionsSection from "./sections/map/RegionsSection";
+import MeteoStantionsSection from "./sections/map/MeteoStantionsSection";
 
 function MapPage() {
   const [section, setSection] = useState<MapSectionEnum | string>(
@@ -39,6 +40,9 @@ function MapPage() {
                 <RegionsSection geo={geo} />
               )}
               {section == MapSectionEnum.Waters && <WaterSection geo={geo} />}
+              {section == MapSectionEnum.Meteo && (
+                <MeteoStantionsSection geo={geo} />
+              )}
             </>
           )
         }

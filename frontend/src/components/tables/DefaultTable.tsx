@@ -78,6 +78,15 @@ const DefaultTable = <T,>(
     return fieldValue;
   };
 
+  const total = () => {
+    const value =
+      props.data.count /
+      (props.data.limit > props.data.count
+        ? props.data.count
+        : props.data.limit);
+    return Math.ceil(value);
+  };
+
   if (!isSuccess) return <></>;
 
   return (
@@ -128,12 +137,7 @@ const DefaultTable = <T,>(
         currentPage={page}
         edgePageCount={2}
         setCurrentPage={setPage}
-        totalPages={
-          props.data.count /
-          (props.data.limit > props.data.count
-            ? props.data.count
-            : props.data.limit)
-        }
+        totalPages={total()}
       />
     </div>
   );

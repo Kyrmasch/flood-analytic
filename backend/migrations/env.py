@@ -22,6 +22,7 @@ from models.refreshtoken import RefreshToken
 from models.role import Role, user_roles
 from models.region import Region
 from models.district import District
+from models.meteorological_station import MeteorologicalStation
 
 Base.metadata.tables.keys()
 
@@ -53,6 +54,12 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
+
+
+def include_object(object, name, type_, reflected, compare_to):
+    if name == "spatial_ref_sys":
+        return False
+    return True
 
 
 if context.is_offline_mode():

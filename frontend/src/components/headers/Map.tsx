@@ -7,6 +7,7 @@ const MapHeader: React.FC<IHeader> = (props) => {
   const [sections, _] = React.useState<IItemMeta[]>([
     { name: "regions", description: "Регионы" },
     { name: "waters", description: "Водоемы" },
+    { name: "meteo", description: "Метеостанции" },
   ]);
   const [selected, setSelected] = React.useState<string>("regions");
 
