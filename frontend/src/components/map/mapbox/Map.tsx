@@ -30,6 +30,7 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
     if (mapContainerRef.current) {
       map.current = new mapboxgl.Map({
         container: mapContainerRef.current,
+        refreshExpiredTiles: false,
         zoom: props.zoom,
         center: props.center,
         pitch: 0,
@@ -72,7 +73,7 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
     }
   }, []);
 
-  return <div ref={mapContainerRef} className="h-full" />;
+  return <div ref={mapContainerRef} className="min-h-0 w-full  bg-gray-100" />;
 });
 
 export default MapBox;

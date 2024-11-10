@@ -30,24 +30,20 @@ function MapPage() {
   }, [setMessageHandler]);
 
   return (
-    <div className="flex flex-col h-screen justify-between pt-[3.5rem]">
-      <Container
-        header={<MapHeader OnSelect={setSection} />}
-        main={
-          geo && (
-            <>
-              {section == MapSectionEnum.Regions && (
-                <RegionsSection geo={geo} />
-              )}
-              {section == MapSectionEnum.Waters && <WaterSection geo={geo} />}
-              {section == MapSectionEnum.Meteo && (
-                <MeteoStantionsSection geo={geo} />
-              )}
-            </>
-          )
-        }
-      ></Container>
-    </div>
+    <Container
+      header={<MapHeader OnSelect={setSection} />}
+      main={
+        geo && (
+          <>
+            {section == MapSectionEnum.Regions && <RegionsSection geo={geo} />}
+            {section == MapSectionEnum.Waters && <WaterSection geo={geo} />}
+            {section == MapSectionEnum.Meteo && (
+              <MeteoStantionsSection geo={geo} />
+            )}
+          </>
+        )
+      }
+    ></Container>
   );
 }
 

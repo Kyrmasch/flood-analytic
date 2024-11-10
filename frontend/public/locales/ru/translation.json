@@ -1,8 +1,21 @@
 {
     "id": "ИД",
     "kato": "КАТО",
+    "name": "Наименовение",
     "name_ru": "Наименовение",
     "name_kz": "Наименовение (Каз)",
     "geom": "Объект",
-    "district": "Район"
+    "district": "Район",
+    "regions": "Регион",
+    "address": "Адрес",
+    "temperature": "Температура",
+    "elevation": "Высота",
+    "code": "Код",
+    "longitude": "Долгота",
+    "latitude": "Широта",
+    "object_id": "Ид объекта",
+    "signout": "Выход",
+    "map": "Карта",
+    "references": "Справочники",
+    "adminpanel": "Администрирование"
 }
