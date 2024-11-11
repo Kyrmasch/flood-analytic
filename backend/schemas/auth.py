@@ -28,3 +28,8 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
+
+class UserResetPassword(BaseModel):
+    username: str
+    old_password: str
+    new_password: str

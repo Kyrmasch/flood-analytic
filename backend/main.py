@@ -12,17 +12,17 @@ from routers.router import router
 app = FastAPI()
 
 dist_directory = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), "frontend", "dist"
+    os.path.dirname(os.path.dirname(__file__)), "frontend",
 )
 
 if not os.path.exists(dist_directory):
     raise RuntimeError(f"Directory '{dist_directory}' does not exist")
 
-assets_directory = os.path.join(dist_directory, "assets")
+assets_directory = os.path.join(dist_directory, "src/assets")
 if not os.path.exists(assets_directory):
     raise RuntimeError(f"Directory '{assets_directory}' does not exist")
 
-fonts_directory = os.path.join(dist_directory, "fonts")
+fonts_directory = os.path.join(dist_directory, "public/fonts")
 if not os.path.exists(fonts_directory):
     raise RuntimeError(f"Directory '{fonts_directory}' does not exist")
 
