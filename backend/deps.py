@@ -3,6 +3,7 @@ from models.user import User
 from usecases.user.get_user import get_user_by_id
 from services.token_service import TokenService
 from services.users_service import UserService
+from services.map_service import MapService
 from infrastructure.database import SessionLocal
 from sqlalchemy.orm import Session
 from fastapi import Depends
@@ -83,3 +84,9 @@ def get_current_user_with_role_factory(required_roles: List[str]):
         return current_user
 
     return dependency
+
+def get_map_service(db: Session = Depends(get_db)):
+    """
+    Сервис работы с картой
+    """
+    return MapService(db)
