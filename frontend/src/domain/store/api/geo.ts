@@ -7,11 +7,24 @@ export const geoApi = coreApi.injectEndpoints({
       query: (params) => `/geo/district?id=${params.index}`,
       keepUnusedDataFor: 5,
     }),
+    getRegionsByDistrict: builder.query<GeoJSON[], { district_id: number }>({
+      query: (params) => `/geo/regions?id=${params.district_id}`,
+      keepUnusedDataFor: 5,
+    }),
     getRegion: builder.query<GeoJSON, { index: number }>({
       query: (params) => `/geo/region?id=${params.index}`,
+      keepUnusedDataFor: 5,
+    }),
+    getMeteoStantions: builder.query<GeoJSON, null>({
+      query: () => `/geo/meteo_stantions`,
       keepUnusedDataFor: 5,
     }),
   }),
 });
 
-export const { useGetDistrictQuery, useGetRegionQuery } = geoApi;
+export const {
+  useGetDistrictQuery,
+  useGetRegionQuery,
+  useGetRegionsByDistrictQuery,
+  useGetMeteoStantionsQuery,
+} = geoApi;

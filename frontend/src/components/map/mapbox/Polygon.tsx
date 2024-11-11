@@ -1,11 +1,13 @@
-import { Map, Popup } from "mapbox-gl";
+import { Map } from "mapbox-gl";
 import { Geometry, Properties } from "../../../domain/interfaces/geo";
+import { PathOptions } from "leaflet";
 
 export interface IBoxPolygon {
   map: Map;
   geometries: Geometry[];
   properties?: Properties | undefined;
-  options: any;
+  options: PathOptions | undefined;
+  showPoput?: (m: Map) => void;
 }
 
 export const addPolygon = (layer: string, props: IBoxPolygon) => {
@@ -24,35 +26,37 @@ export const addPolygon = (layer: string, props: IBoxPolygon) => {
   });
 
   props.map.addLayer({
-    id: "polygon-layer",
+    id: `polygon-layer-${layer}`,
     type: "fill",
     source: layer,
     layout: {},
     paint: {
-      "fill-color": "#5c6ac4",
-      "fill-opacity": 0.08,
+      "fill-color": props.options ? props.options.fillColor : "#5c6ac4",
+      "fill-opacity": props.options ? props.options.fillOpacity : 0.08,
     },
   });
 
   props.map.addLayer({
-    id: "outline",
+    id: `polygon-outline-${layer}`,
     type: "line",
     source: layer,
     layout: {},
     paint: {
-      "line-color": "tomato",
-      "line-width": 2,
+      "line-color": props.options ? props.options.color : "yellow",
+      "line-width": props.options ? props.options.weight : 2,
     },
   });
 
   if (props.properties) {
-    const poput = new Popup({ closeOnClick: false });
-    poput
-      .setLngLat([props.properties.x, props.properties.y])
-      .setHTML(
-        `<strong>${props.properties.name}</strong><br>KATO: ${props.properties.kato}<br>Координаты: [${props.properties.x}, ${props.properties.y}]`
-      );
-    //.addTo(props.map);
+    props.map.on("click", `polygon-layer-${layer}`, (event) => {
+      const features = props.map.queryRenderedFeatures(event.point, {
+        layers: [`polygon-layer-${layer}`],
+      });
+
+      if (!features.length) return;
+
+      if (props.showPoput) props.showPoput(props.map);
+    });
   }
 };
 

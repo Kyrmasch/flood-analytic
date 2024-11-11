@@ -9,24 +9,22 @@ function ReferencePage() {
   const [offset, setOffset] = React.useState<number>(0);
   const [table, setTable] = React.useState<string | null>(null);
   const { data: data } = useGetDataQuery(
-    { tablename: table ?? "", limit: 10, offset: offset },
+    { tablename: table ?? "", limit: 20, offset: offset },
     {
       refetchOnMountOrArgChange: true,
     }
   );
 
   return (
-    <div className="flex flex-col h-screen justify-between pt-[3.5rem]">
-      <Container
-        header={<ReferenceHeader OnSelect={setTable} />}
-        main={
-          data &&
-          table && (
-            <DefaultTable tableName={table} data={data} setOffset={setOffset} />
-          )
-        }
-      ></Container>
-    </div>
+    <Container
+      header={<ReferenceHeader OnSelect={setTable} />}
+      main={
+        data &&
+        table && (
+          <DefaultTable tableName={table} data={data} setOffset={setOffset} />
+        )
+      }
+    ></Container>
   );
 }
 

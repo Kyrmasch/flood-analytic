@@ -4,12 +4,14 @@ import DialogYesNo, { IDialogYesNoRef } from "./dialogs/DialogYesNo";
 import { useAppDispatch } from "../domain/store/hook";
 import { setToken } from "../domain/store/slices/baseSlice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Header() {
   const user = useUser();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const dialogYesNoRef = useRef<IDialogYesNoRef>(null);
+  const { t } = useTranslation();
 
   const logOut = () => {
     dialogYesNoRef.current?.open({
@@ -24,8 +26,8 @@ function Header() {
   };
 
   return (
-    <header>
-      <nav className="fixed top-0 z-40 w-full bg-white border-b border-gray-200">
+    <header className="relative">
+      <nav className="top-0 w-full bg-white border-b border-gray-200">
         <div className="flex justify-between items-center mx-auto px-4 py-2">
           <a href="https://flowbite.com" className="flex items-center">
             <span className="self-center text-xl font-medium whitespace-nowrap ">
@@ -42,7 +44,7 @@ function Header() {
               onClick={logOut}
               className="text-[1em] font-normal text-primary-600 hover:underline hidden sm:block"
             >
-              Выход
+              {t("signout")}
             </button>
           </div>
         </div>

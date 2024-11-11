@@ -7,8 +7,12 @@ const ProtectedLayout = () => {
   return (
     <UserProvider>
       <Header />
-      <Sidebar />
-      <Outlet />
+      <div className="flex-grow min-h-0 flex">
+        <Sidebar />
+        <div className="flex-1 flex flex-col min-h-0">
+          <Outlet />
+        </div>
+      </div>
     </UserProvider>
   );
 };

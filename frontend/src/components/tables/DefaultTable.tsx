@@ -24,6 +24,7 @@ const DefaultTable = <T,>(
   props: IDefaultTable<T>,
   ref: Ref<IDefaultTableRef>
 ) => {
+  const [page, setPage] = React.useState<number>(0);
   const { t } = useTranslation();
   const { data: table, isSuccess } = useGetMetaQuery(
     {
@@ -59,7 +60,9 @@ const DefaultTable = <T,>(
     [props.tableName]
   );
 
-  const [page, setPage] = React.useState<number>(0);
+  React.useEffect(() => {
+    setPage(0);
+  }, [props.tableName]);
 
   useImperativeHandle(ref, () => ({
     open: open,
@@ -78,63 +81,75 @@ const DefaultTable = <T,>(
     return fieldValue;
   };
 
+  const total = () => {
+    const value =
+      props.data.count /
+      (props.data.limit > props.data.count
+        ? props.data.count
+        : props.data.limit);
+    return Math.ceil(value);
+  };
+
   if (!isSuccess) return <></>;
 
   return (
-    <div className="table_container">
-      <table className="table">
-        <thead className="head">
-          <tr>
-            {columns(table).map((col: IColumnMeta, index: number) => {
-              return (
-                <th
-                  scope="col"
-                  key={`${props.tableName}_${index}`}
-                  className="px-6 py-3"
-                >
-                  {t(col.name)}
-                </th>
-              );
+    <div className="flex flex-col flex-grow min-h-0">
+      <div
+        className="table_container flex-grow min-h-0 overflow-y-auto"
+        style={{ height: "calc(100vh - 57px - 120px)" }}
+      >
+        <table className="table">
+          <thead className="head">
+            <tr>
+              {columns(table).map((col: IColumnMeta, index: number) => {
+                return (
+                  <th
+                    scope="col"
+                    key={`${props.tableName}_${index}`}
+                    className="px-6 py-3"
+                  >
+                    {t(col.name)}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {props.data.data.map((item, i: number) => {
+              if (item.data) {
+                return (
+                  <tr
+                    className="bg-white border-b"
+                    key={`${props.tableName}_row_${i}`}
+                  >
+                    {columns(table).map((col, y: number) => {
+                      if ((item.data as Record<string, any>)[col.name]) {
+                        return (
+                          <td
+                            className="px-6 py-4"
+                            key={`${props.tableName}_item_${i}_${y}`}
+                          >
+                            {getData(item.data as Record<string, any>, col)}
+                          </td>
+                        );
+                      }
+                    })}
+                  </tr>
+                );
+              }
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {props.data.data.map((item, i: number) => {
-            if (item.data) {
-              return (
-                <tr
-                  className="bg-white border-b"
-                  key={`${props.tableName}_row_${i}`}
-                >
-                  {columns(table).map((col, y: number) => {
-                    if ((item.data as Record<string, any>)[col.name]) {
-                      return (
-                        <td
-                          className="px-6 py-4"
-                          key={`${props.tableName}_item_${i}_${y}`}
-                        >
-                          {getData(item.data as Record<string, any>, col)}
-                        </td>
-                      );
-                    }
-                  })}
-                </tr>
-              );
-            }
-          })}
-        </tbody>
-      </table>
-      <Pagination
-        currentPage={page}
-        edgePageCount={2}
-        setCurrentPage={setPage}
-        totalPages={
-          props.data.count /
-          (props.data.limit > props.data.count
-            ? props.data.count
-            : props.data.limit)
-        }
-      />
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex items-center justify-center border-t h-16">
+        <Pagination
+          currentPage={page}
+          edgePageCount={2}
+          setCurrentPage={setPage}
+          totalPages={total()}
+        />
+      </div>
     </div>
   );
 };

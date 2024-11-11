@@ -8,12 +8,9 @@ interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({ header, main }) => {
   return (
-    <div
-      className="flex flex-col w-full"
-      style={{ minHeight: "calc(100vh - 3.5rem)" }}
-    >
-      <div className="md:ml-64">{header}</div>
-      <main className="md:ml-64 flex-grow">{main}</main>
+    <div className="flex flex-col w-full flex-1 min-h-0">
+      <div>{header}</div>
+      <main className="flex-grow flex min-h-0">{main}</main>
     </div>
   );
 };

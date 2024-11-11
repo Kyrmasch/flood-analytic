@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  @apply h-full;
+}
+
 ._blur {
   @apply bg-gray-900 bg-opacity-40 fixed inset-0 z-40;
   backdrop-filter: blur(3px);
