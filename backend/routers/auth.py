@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie
-from schemas.auth import Token, User as UserSchema
+from schemas.auth import Token, User as UserSchema, UserResetPassword
 from services.token_service import TokenService
 from deps import get_current_user, get_token_service, get_user_service
 from services.users_service import UserService
@@ -88,4 +88,25 @@ async def refresh_access_token(
         samesite="Lax",
         secure=True,
     )
+    return response
+
+@auth_router.put("/users/me/reset-password", response_model=None)
+async def reset_password(
+    req: UserResetPassword,
+    user_service: UserService = Depends(get_user_service),
+):
+    """
+    Сбросить пароль
+    """
+
+    # Update the password in the database
+    await asyncio.create_task(
+        user_service.reset_password(req.username, req.old_password, req.new_password)
+    )
+
+    # Prepare and send the response
+    response = JSONResponse(
+        content={"message": "Password updated successfully"}
+    )
+
     return response
