@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 from shapely import Point
 from deps import get_db
 from infrastructure.dto.geo_json_dto import GeoJsonDto
-from models.meteorological_station import MeteorologicalStation
+from models.catalog import Catalog
+from models.datavalue import DataValue
 from models.region import Region
 from models.district import District
 from infrastructure.geo import GeoManager, geo_manager
@@ -11,6 +12,8 @@ from sqlalchemy.orm import Session
 import geopandas as gpd
 from shapely.errors import TopologicalError
 import asyncio
+
+from models.site import Site
 
 geo_router = APIRouter()
 
@@ -116,7 +119,7 @@ async def get_geo_meteostantions(
     geo: GeoManager = Depends(lambda: geo_manager),
     db: Session = Depends(get_db),
 ):
-    stantions = db.query(MeteorologicalStation).all()
+    sites = db.query(Site).filter(Site.site_type_id == 1).all()
     data = {
         "object_id": [],
         "name": [],
@@ -127,14 +130,30 @@ async def get_geo_meteostantions(
         "geometry": [],
     }
 
-    for row in stantions:
-        data["object_id"].append(row.object_id)
-        data["name"].append(row.name)
-        data["address"].append(row.address)
-        data["temperature"].append(row.temperature)
-        data["elevation"].append(row.elevation)
-        data["code"].append(row.code)
-        point = Point(row.longitude, row.latitude)
+    for site in sites:
+        temperature = 0
+        elevation = 0
+        catalogs: List[Catalog] = site.catalogs
+
+        for catalog in catalogs:
+            if catalog.variable_id == 2:
+                values: List[DataValue] = catalog.data_values
+                if len(values):
+                    temperature = values[0].value
+
+            if catalog.variable_id == 3:
+                values: List[DataValue] = catalog.data_values
+                if len(values):
+                    elevation = values[0].value
+
+        data["object_id"].append(site.id)
+        data["name"].append(site.name)
+        data["address"].append(site.description)
+        data["temperature"].append(temperature)
+        data["elevation"].append(elevation)
+        data["code"].append(site.code)
+
+        point = Point(site.lon, site.lat)
         data["geometry"].append(point)
 
     gdf = gpd.GeoDataFrame(data, crs="EPSG:4326")

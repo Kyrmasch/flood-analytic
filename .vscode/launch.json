@@ -36,6 +36,17 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/backend"
             }
+        },
+        {
+            "name": "Gharysh",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/gharysh.py",
+            "jinja": true,
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/backend"
+            }
         }
         
     ]

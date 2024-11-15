@@ -16,6 +16,6 @@ class DataValue(Base):
     qcl = Column(Integer, ForeignKey("qcl.id"), nullable=True)
     date_type_id = Column(Integer, ForeignKey("date_type.id"), nullable=True)
 
-    catalog = relationship("Catalog")
+    catalog = relationship("Catalog", back_populates="data_values")
     qcl_rel = relationship("QCL")
     date_type = relationship("DateType")

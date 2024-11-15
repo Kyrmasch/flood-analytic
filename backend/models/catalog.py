@@ -16,7 +16,8 @@ class Catalog(Base):
     offset_type_id_add = Column(Integer, nullable=True)
     db_list_id = Column(Integer, nullable=True)
 
-    site = relationship("Site")
+    site = relationship("Site", back_populates="catalogs")
+    data_values = relationship("DataValue", back_populates="catalog")
     variable = relationship("Variable")
     method = relationship("Method")
     source = relationship("DataSource")
