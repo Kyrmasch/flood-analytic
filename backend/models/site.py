@@ -23,3 +23,5 @@ class Site(Base):
 
     site_type = relationship("SiteType")
     meteo_zone = relationship("MeteoZone")
+
+    catalogs = relationship("Catalog", back_populates="site")
