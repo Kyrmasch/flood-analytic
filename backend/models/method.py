@@ -12,4 +12,4 @@ class Method(Base):
     parent_id = Column(Integer, nullable=True)
     method_type_id = Column(Integer, ForeignKey("method_type.id"))
 
-    method_type = relationship("MethodType")
+    method_type = relationship("MethodType", back_populates="methods")
