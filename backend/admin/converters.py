@@ -18,6 +18,9 @@ from starlette_admin.fields import (
 from infrastructure.dto.geo_json_dto import GeoJsonDto
 from infrastructure.geo import GeoManager
 from infrastructure.database import SessionLocal
+import json
+from geoalchemy2.shape import to_shape, from_shape
+from shapely.geometry import shape
 
 geo = GeoManager()
 db = SessionLocal()
@@ -41,7 +44,13 @@ class GeomField(BaseField):
     ) -> Optional[Dict[str, Any]]:
         try:
             value = form_data.get(self.id)
-            return json.loads(value) if value is not None else None  # type: ignore
+            geo_json = json.loads(value) if value is not None else None
+            if geo_json is not None:
+                for feature in geo_json["features"]:
+                    geom = shape(feature["geometry"])
+                    geom_geoalchemy = from_shape(geom, srid=4326)
+                    return geom_geoalchemy
+            return None
         except JSONDecodeError:
             return None
 

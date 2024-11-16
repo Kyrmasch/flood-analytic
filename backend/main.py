@@ -26,9 +26,14 @@ fonts_directory = os.path.join(dist_directory, "fonts")
 if not os.path.exists(fonts_directory):
     raise RuntimeError(f"Directory '{fonts_directory}' does not exist")
 
+js_directory = os.path.join(dist_directory, "js")
+if not os.path.exists(fonts_directory):
+    raise RuntimeError(f"Directory '{fonts_directory}' does not exist")
+
 app.mount("/fonts", StaticFiles(directory=fonts_directory), name="fonts")
 app.mount("/assets", StaticFiles(directory=assets_directory), name="assets")
 app.mount("/static", StaticFiles(directory=dist_directory), name="static")
+app.mount("/js", StaticFiles(directory=js_directory), name="js")
 
 admin_init(app)
 

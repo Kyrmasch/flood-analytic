@@ -17,6 +17,7 @@ class Variable(Base):
     name = Column(String, nullable=False)
 
     unit = relationship("Unit")
+    time = relationship("Time")
     data_type = relationship("DataType")
     general_category = relationship("Category")
     sample_medium = relationship("SampleMedium")

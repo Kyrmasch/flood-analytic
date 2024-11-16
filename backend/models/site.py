@@ -25,3 +25,6 @@ class Site(Base):
     meteo_zone = relationship("MeteoZone")
 
     catalogs = relationship("Catalog", back_populates="site")
+
+    def __str__(self):
+        return self.name
