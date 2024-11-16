@@ -2,4 +2,4 @@ rmm_log.txt*
 backend/migrations/versions/*
 terra-agronomic-652628374bcb.json
 backend/files/*
-**/__pycache__/
+__pycache__/
