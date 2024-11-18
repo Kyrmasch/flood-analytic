@@ -90,6 +90,7 @@ async def refresh_access_token(
     )
     return response
 
+
 @auth_router.put("/users/me/reset-password", response_model=None)
 async def reset_password(
     req: UserResetPassword,
@@ -105,8 +106,6 @@ async def reset_password(
     )
 
     # Prepare and send the response
-    response = JSONResponse(
-        content={"message": "Password updated successfully"}
-    )
+    response = JSONResponse(content={"message": "Password updated successfully"})
 
     return response

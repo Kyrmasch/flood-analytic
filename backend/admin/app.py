@@ -1,6 +1,7 @@
 from typing import Optional
 from fastapi.middleware import Middleware
 from fastapi import FastAPI
+from fastapi.templating import Jinja2Templates
 from requests import Request
 from starlette_admin import I18nConfig
 from starlette_admin.contrib.sqla import Admin
@@ -73,8 +74,10 @@ def admin_init(app: FastAPI):
     admin = AdminPanel(
         engine,
         i18n_config=I18nConfig(default_locale="ru"),
+        title="FloodAnalytic Admin",
         auth_provider=UsernameAndPasswordProvider(),
         middlewares=[Middleware(SessionMiddleware, secret_key=API_KEY)],
+        templates_dir="admin/templates",
     )
 
     admin.add_view(

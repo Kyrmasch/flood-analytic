@@ -85,6 +85,7 @@ def get_current_user_with_role_factory(required_roles: List[str]):
 
     return dependency
 
+
 def get_map_service(db: Session = Depends(get_db)):
     """
     Сервис работы с картой

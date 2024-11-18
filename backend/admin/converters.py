@@ -32,7 +32,7 @@ class GeomField(BaseField):
     modes: Optional[Sequence[str]] = None
     render_function_key: str = "json"
     form_template: str = "forms/json.html"
-    display_template: str = "displays/json.html"
+    display_template: str = "details/geom.html"
 
     def __post_init__(self) -> None:
         if self.modes is None:
