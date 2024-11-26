@@ -26,22 +26,25 @@ const ReferenceHeader: React.FC<IHeader> = (props) => {
 
   return (
     <nav className="bg-gray-50 z-40 w-full border-b border-gray-200">
-      <div className="text-sm font-medium text-center text-gray-500">
-        <ul className="flex flex-wrap -mb-px tab">
-          {table?.map((meta) => {
-            return (
-              <li className="me-2" key={`header-item-${meta.name}`}>
-                <a
-                  href="#"
-                  onClick={() => setSelected(meta.name)}
-                  className={selected == meta.name ? "selected" : "default"}
-                >
-                  {meta.description}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+      <div className="text-sm font-medium text-center text-gray-500 flex items-center justify-between">
+        <div className="flex-shrink-0">
+          <ul className="flex flex-wrap -mb-px tab">
+            {table?.map((meta) => {
+              return (
+                <li className="me-2" key={`header-item-${meta.name}`}>
+                  <a
+                    href="#"
+                    onClick={() => setSelected(meta.name)}
+                    className={selected == meta.name ? "selected" : "default"}
+                  >
+                    {meta.description}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="flex space-x-2">{props.child && props.child}</div>
       </div>
     </nav>
   );

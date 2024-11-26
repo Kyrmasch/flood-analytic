@@ -31,26 +31,36 @@ function ReferencePage() {
     <Container
       header={
         <div style={{ display: "flex", alignItems: "center" }}>
-          <ReferenceHeader OnSelect={setTable} />
-          {table && (
-            <Button
-              onClick={() => setIsModalOpen(true)}
-              style={{ marginLeft: "10px" }}
-            >
-              Добавить данные
-            </Button>
-          )}
+          <ReferenceHeader
+            OnSelect={setTable}
+            child={
+              table && (
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Добавить
+                </Button>
+              )
+            }
+          />
         </div>
       }
       main={
         <>
-          {data &&
-            table && (
-              <DefaultTable tableName={table} data={data} setOffset={setOffset} />
-            )}
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Добавить данные">
+          {data && table && (
+            <DefaultTable tableName={table} data={data} setOffset={setOffset} />
+          )}
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Добавить данные"
+          >
             {metadata ? (
-                <DynamicForm metadata={metadata} onSubmit={(data) => console.log(data)} />
+              <DynamicForm
+                metadata={metadata}
+                onSubmit={(data) => console.log(data)}
+              />
             ) : (
               <p>Загрузка метаданных...</p>
             )}
