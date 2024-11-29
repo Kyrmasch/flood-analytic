@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from usecases.map.get_static_image import get_static_image
+from usecases.map.get_static_image import get_static_image, save_region_geojson
 from infrastructure.auth import auth_manager
 
 
@@ -12,3 +12,8 @@ class MapService:
         self, longitude: float, latitude: float, zoom: float, width: int, height: int
     ):
         return get_static_image(longitude, latitude, zoom, width, height)
+
+    async def save_region_geojson(
+        self, region: str,
+    ):
+        return save_region_geojson(region)

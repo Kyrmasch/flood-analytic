@@ -27,3 +27,84 @@ def get_static_image(
     image_stream = BytesIO(response.content)
 
     return StreamingResponse(image_stream, media_type="image/png")
+
+def save_region_geojson(region:str):
+    ## TBC
+    # existing_record = mongo_collection.find_one({"features.0.properties.region": region})
+    # if existing_record:
+    #     existing_record["_id"] = str(existing_record["_id"])
+    #     return {
+    #         "message": f"Region '{region}' already exists in the database.",
+    #         "status": "duplicate",
+    #         "geojson": existing_record,
+    #     }
+
+    url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{region}.json"
+    params = {"access_token": MAPBOX_TOKEN}
+    response = requests.get(url, params=params)
+    if response.status_code != 200:
+        return {
+            "message": "Failed to fetch data from Mapbox API",
+            "status": "error"
+        }
+
+    data = response.json()
+    if not data["features"]:
+        return {
+            "message": f"No features found for the specified region: {region}",
+            "status": "error"
+        }
+
+    feature = data["features"][0]
+    geometry = feature.get("geometry")
+
+    if not geometry:
+        return {
+            "message": "Region does not have valid geometry",
+            "status": "error"
+        }
+
+    coordinates = geometry["coordinates"]
+
+    if geometry["type"] == "Point":
+        lat, lon = coordinates[1], coordinates[0]
+        buffer_size = 0.01  
+        coordinates = [[
+            [lon - buffer_size, lat - buffer_size],
+            [lon + buffer_size, lat - buffer_size],
+            [lon + buffer_size, lat + buffer_size],
+            [lon - buffer_size, lat + buffer_size],
+            [lon - buffer_size, lat - buffer_size]
+        ]]
+        geometry["type"] = "Polygon"
+
+    # Prepare GeoJSON
+    geojson_data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": coordinates,
+                },
+                "properties": {
+                    "region": region,
+                },
+            }
+        ]
+    }
+
+    # Save GeoJSON to MongoDB
+    ## TBC
+    ## insert_result = mongo_collection.insert_one(geojson_data)
+
+    # # Add the MongoDB ObjectId to the response as a string
+    ## TBC
+    # geojson_data["_id"] = str(insert_result.inserted_id)
+
+    return {
+        "message": f"Polygon for region '{region}' created and saved successfully.",
+        "status": "success",
+        "geojson": geojson_data,
+    }
