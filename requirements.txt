@@ -18,3 +18,5 @@ earthengine-api
 asyncio
 itsdangerous
 starlette-admin
+celery[redis]
+redis

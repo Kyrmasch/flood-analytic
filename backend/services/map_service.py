@@ -14,6 +14,7 @@ class MapService:
         return get_static_image(longitude, latitude, zoom, width, height)
 
     async def save_region_geojson(
-        self, region: str,
+        self,
+        region: str,
     ):
         return save_region_geojson(region)

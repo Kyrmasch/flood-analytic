@@ -1,0 +1,4 @@
+/backend
+
+1. celery -A background.app worker --loglevel=info -Q flood -c 1
+2. celery -A background.app beat --loglevel=info

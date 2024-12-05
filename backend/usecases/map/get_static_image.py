@@ -28,7 +28,8 @@ def get_static_image(
 
     return StreamingResponse(image_stream, media_type="image/png")
 
-def save_region_geojson(region:str):
+
+def save_region_geojson(region: str):
     ## TBC
     # existing_record = mongo_collection.find_one({"features.0.properties.region": region})
     # if existing_record:
@@ -43,39 +44,35 @@ def save_region_geojson(region:str):
     params = {"access_token": MAPBOX_TOKEN}
     response = requests.get(url, params=params)
     if response.status_code != 200:
-        return {
-            "message": "Failed to fetch data from Mapbox API",
-            "status": "error"
-        }
+        return {"message": "Failed to fetch data from Mapbox API", "status": "error"}
 
     data = response.json()
     if not data["features"]:
         return {
             "message": f"No features found for the specified region: {region}",
-            "status": "error"
+            "status": "error",
         }
 
     feature = data["features"][0]
     geometry = feature.get("geometry")
 
     if not geometry:
-        return {
-            "message": "Region does not have valid geometry",
-            "status": "error"
-        }
+        return {"message": "Region does not have valid geometry", "status": "error"}
 
     coordinates = geometry["coordinates"]
 
     if geometry["type"] == "Point":
         lat, lon = coordinates[1], coordinates[0]
-        buffer_size = 0.01  
-        coordinates = [[
-            [lon - buffer_size, lat - buffer_size],
-            [lon + buffer_size, lat - buffer_size],
-            [lon + buffer_size, lat + buffer_size],
-            [lon - buffer_size, lat + buffer_size],
-            [lon - buffer_size, lat - buffer_size]
-        ]]
+        buffer_size = 0.01
+        coordinates = [
+            [
+                [lon - buffer_size, lat - buffer_size],
+                [lon + buffer_size, lat - buffer_size],
+                [lon + buffer_size, lat + buffer_size],
+                [lon - buffer_size, lat + buffer_size],
+                [lon - buffer_size, lat - buffer_size],
+            ]
+        ]
         geometry["type"] = "Polygon"
 
     # Prepare GeoJSON
@@ -92,7 +89,7 @@ def save_region_geojson(region:str):
                     "region": region,
                 },
             }
-        ]
+        ],
     }
 
     # Save GeoJSON to MongoDB

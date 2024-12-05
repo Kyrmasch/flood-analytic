@@ -35,6 +35,7 @@ async def get_mapbox_image(
 
     return streamingResponse
 
+
 @map_router.post("/create_polygon")
 async def create_polygon(
     region: str = Query(..., description="City or region to fetch coordinates for"),
@@ -44,8 +45,6 @@ async def create_polygon(
     Сохранить GeoJSON данные
     """
 
-    response = await asyncio.create_task(
-        map_service.save_region_geojson(region=region)
-    )
+    response = await asyncio.create_task(map_service.save_region_geojson(region=region))
 
     return response
