@@ -3,4 +3,4 @@ backend/migrations/versions/*
 terra-agronomic-652628374bcb.json
 backend/files/*
 __pycache__/
-backend/celerybeat-schedule.txt*
+backend/celerybeat-schedule*
