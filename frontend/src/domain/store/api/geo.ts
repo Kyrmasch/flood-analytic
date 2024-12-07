@@ -1,5 +1,6 @@
 import { coreApi } from "./api";
 import { GeoJSON } from "../../../domain/interfaces/geo";
+import { FeatureCollection, Point } from "geojson";
 
 export const geoApi = coreApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,7 +16,7 @@ export const geoApi = coreApi.injectEndpoints({
       query: (params) => `/geo/region?id=${params.index}`,
       keepUnusedDataFor: 5,
     }),
-    getMeteoStantions: builder.query<GeoJSON, null>({
+    getMeteoStantions: builder.query<FeatureCollection<Point>, null>({
       query: () => `/geo/meteo_stantions`,
       keepUnusedDataFor: 5,
     }),
