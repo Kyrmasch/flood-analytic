@@ -13,6 +13,31 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
 
   const poput = new Popup({ closeOnClick: false });
 
+  const convertPointsToPolygons = (geojson: any) => {
+    return {
+      ...geojson,
+      features: geojson.features.map((feature: any) => {
+        const [lng, lat] = feature.geometry.coordinates;
+        const size = 0.0001; // Размер полигона
+        return {
+          ...feature,
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [lng - size, lat - size],
+                [lng + size, lat - size],
+                [lng + size, lat + size],
+                [lng - size, lat + size],
+                [lng - size, lat - size],
+              ],
+            ],
+          },
+        };
+      }),
+    };
+  };
+
   const addLayer = (_map: Map) => {
     addPolygon("district", {
       map: _map!,
@@ -36,6 +61,25 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
           "circle-color": "#007cbf",
           "circle-stroke-width": 2,
           "circle-stroke-color": "#ffffff",
+        },
+      });
+
+      const polygonStations = convertPointsToPolygons(stantions);
+      if (!_map.getSource("meteo-stations-polygons")) {
+        _map.addSource("meteo-stations-polygons", {
+          type: "geojson",
+          data: polygonStations as any,
+        });
+      }
+
+      _map.addLayer({
+        id: "meteo-stations-bars",
+        type: "fill-extrusion",
+        source: "meteo-stations-polygons",
+        paint: {
+          "fill-extrusion-height": 200,
+          "fill-extrusion-color": "#00aaff",
+          "fill-extrusion-opacity": 1,
         },
       });
     }
