@@ -69,6 +69,10 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
         });
       });
 
+      map.current.on("error", (e) => {
+        console.error("Mapbox Error:", e.error);
+      });
+
       return () => map.current?.remove();
     }
   }, []);
