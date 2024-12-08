@@ -9,6 +9,7 @@ export interface IMapBox {
   center: LngLatLike;
   zoom: number;
   addLayer?: (map: Map) => void;
+  addStyle?: (map: Map) => void;
 }
 
 export interface IMapBoxRef {
@@ -59,6 +60,10 @@ const MapBox = forwardRef<IMapBoxRef, IMapBox>((props, ref) => {
           tileSize: 512,
           maxzoom: 14,
         });
+
+        if (props.addStyle) {
+          props.addStyle(map.current!);
+        }
 
         map.current?.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
 

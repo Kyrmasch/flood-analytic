@@ -9,6 +9,7 @@ import { convertPointsToCircles } from "../../../components/map/utils";
 import { FeatureCollection, Point } from "geojson";
 import * as THREE from "three";
 import mapboxgl from "mapbox-gl";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 type _3DType = "MAP" | "THREE";
 
@@ -21,6 +22,9 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
 
   const poput = new Popup({ closeOnClick: false });
 
+  const modelAltitude = 0;
+  const modelRotate = [Math.PI / 2, 0, 0];
+
   const addThreeJSModelsForStations = (
     map: mapboxgl.Map,
     stations: FeatureCollection<Point>
@@ -28,47 +32,115 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
     const scene = new THREE.Scene();
     const camera = new THREE.Camera();
 
+    const directionalLight1 = new THREE.DirectionalLight(0xffffff);
+    directionalLight1.position.set(0, -70, 100).normalize();
+    scene.add(directionalLight1);
+
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+    directionalLight2.position.set(0, 70, 100).normalize();
+    scene.add(directionalLight2);
+
+    const loader = new GLTFLoader();
+    const stationTransforms: { model: THREE.Object3D; transformMatrix: any }[] =
+      [];
+    let isModelLoaded = false;
+
+    loader.load(
+      "https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf",
+      (gltf) => {
+        stations.features.forEach((feature) => {
+          const modelOrigin = feature.geometry.coordinates as [number, number];
+
+          const modelAsMercatorCoordinate =
+            mapboxgl.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude);
+
+          const modelTransform = {
+            translateX: modelAsMercatorCoordinate.x,
+            translateY: modelAsMercatorCoordinate.y,
+            translateZ: modelAsMercatorCoordinate.z,
+            rotateX: modelRotate[0],
+            rotateY: modelRotate[1],
+            rotateZ: modelRotate[2],
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits(),
+          };
+
+          const rotationX = new THREE.Matrix4().makeRotationAxis(
+            new THREE.Vector3(1, 0, 0),
+            modelTransform.rotateX
+          );
+          const rotationY = new THREE.Matrix4().makeRotationAxis(
+            new THREE.Vector3(0, 1, 0),
+            modelTransform.rotateY
+          );
+          const rotationZ = new THREE.Matrix4().makeRotationAxis(
+            new THREE.Vector3(0, 0, 1),
+            modelTransform.rotateZ
+          );
+
+          const l = new THREE.Matrix4()
+            .makeTranslation(
+              modelTransform.translateX,
+              modelTransform.translateY,
+              modelTransform.translateZ
+            )
+            .scale(
+              new THREE.Vector3(
+                modelTransform.scale,
+                -modelTransform.scale,
+                modelTransform.scale
+              )
+            )
+            .multiply(rotationX)
+            .multiply(rotationY)
+            .multiply(rotationZ);
+
+          const stationModel = gltf.scene.clone();
+          stationModel.matrixAutoUpdate = true;
+          stationModel.applyMatrix4(l);
+
+          stationTransforms.push({
+            model: stationModel,
+            transformMatrix: l,
+          });
+
+          scene.add(stationModel);
+        });
+
+        isModelLoaded = true;
+      }
+    );
+
     const renderer = new THREE.WebGLRenderer({
       canvas: map.getCanvas(),
       context: map.painter.context.gl,
       antialias: true,
     });
+
     renderer.autoClear = false;
 
-    stations.features.forEach((feature) => {
-      const [lng, lat] = feature.geometry.coordinates as [number, number];
-      const mercatorCoord = mapboxgl.MercatorCoordinate.fromLngLat(
-        [lng, lat],
-        0
-      );
-
-      const scale = mercatorCoord.meterInMercatorCoordinateUnits();
-
-      // Создаем цилиндр для метеостанции
-      const geometry = new THREE.CylinderGeometry(0.01, 0.01, 50, 32);
-      const material = new THREE.MeshBasicMaterial({ color: "#007cbf" });
-      const cylinder = new THREE.Mesh(geometry, material);
-
-      // Устанавливаем позицию и масштаб
-      cylinder.position.set(mercatorCoord.x, mercatorCoord.y, mercatorCoord.z);
-      cylinder.scale.set(scale, scale, scale);
-
-      scene.add(cylinder);
-    });
-
     return {
-      id: "meteo-stations-3d-layer",
+      id: "3d-models",
       type: "custom",
       renderingMode: "3d",
-      onAdd: () => {},
-      render: (_: any, matrix: any) => {
-        // Обновляем проекционную матрицу камеры
-        camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix);
+      onAdd: () => {
+        console.log("3D model layer added.");
+      },
+      render: (_: WebGLRenderingContext, matrix: number[]) => {
+        if (!isModelLoaded) {
+          return;
+        }
 
-        // Рендерим сцену
-        renderer.state.reset();
+        const m = new THREE.Matrix4().fromArray(matrix);
+
+        stationTransforms.forEach(({ model, transformMatrix }) => {
+          const combinedMatrix = m.clone().multiply(transformMatrix);
+          model.matrixWorld = combinedMatrix;
+        });
+
+        camera.projectionMatrix = m;
+
+        renderer.resetState();
         renderer.render(scene, camera);
-
         map.triggerRepaint();
       },
     };
@@ -114,7 +186,6 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
         type: "geojson",
         data: stantions as GeoJSON.GeoJSON,
       });
-
       _map.addLayer({
         id: "meteo-stations-layer",
         type: "circle",
@@ -126,8 +197,7 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
           "circle-stroke-color": "#ffffff",
         },
       });
-
-      if (_typeRender == "MAP") {
+      if (_typeRender.toString() == "MAP") {
         const circleStations: FeatureCollection =
           convertPointsToCircles(stantions);
         if (!_map.getSource("meteo-stations-circles")) {
@@ -147,10 +217,16 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
           },
         });
         animateCircles(_map, circleStations as FeatureCollection<any>);
-      } else if (_typeRender == "THREE") {
-        const customLayer = addThreeJSModelsForStations(_map, stantions as any);
-        _map.addLayer(customLayer as any);
+      } else if (_typeRender.toString() == "THREE") {
       }
+    }
+  };
+
+  const addStyle = (_map: Map) => {
+    if (_typeRender.toString() == "MAP") {
+    } else if (_typeRender.toString() == "THREE") {
+      const customLayer = addThreeJSModelsForStations(_map, stantions as any);
+      _map.addLayer(customLayer as any, "waterway-label");
     }
   };
 
@@ -167,6 +243,7 @@ const MeteoStantionsSection: React.FC<ISection> = (props) => {
           }
           zoom={6.8}
           addLayer={addLayer}
+          addStyle={addStyle}
         />
       )}
     </>
